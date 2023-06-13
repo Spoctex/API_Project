@@ -39,7 +39,7 @@ module.exports = {
         state:'NY'
       },
       {
-        organizerId:3,
+        organizerId:2,
         name:'Group3',
         type:'literature',
         private: true,

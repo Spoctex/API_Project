@@ -11,8 +11,11 @@ const router = express.Router();
 
 
 router.get('/', async (req, res) => {
-    //test
-    let Groups = await Group.findAll();
+    let Groups;
+    console.log(req.user,'?')
+    if(req.user){
+        Groups = await req.user.getGroups();
+    }else Groups = await Group.findAll();
     for (let i = 0; i < Groups.length;i++){
         let mmbrs = await Groups[i].countUsers();
         let prevImg = await Groups[i].getGroupImages({where:{preview:true}});
