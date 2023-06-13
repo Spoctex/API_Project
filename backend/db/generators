@@ -1,0 +1,19 @@
+npx sequelize model:generate --name Group --attributes organizerId:integer,name:string,about:text,type:enum,private:boolean,city:string,state:string
+
+
+npx sequelize model:generate --name Membership --attributes userId:integer,groupId:integer,status:enum
+
+
+npx sequelize model:generate --name Venue --attributes groupId:integer,address:string,city:string,state:string,lat:decimal,lng:decimal
+
+
+npx sequelize model:generate --name GroupImage --attributes groupId:integer,url:string,preview:boolean
+
+
+npx sequelize model:generate --name Event --attributes venueId:integer,groupId:integer,name:string,description:text,type:enum,capacity:integer,price:integer,startDate:date,endDate:date
+
+
+npx sequelize model:generate --name EventImage --attributes eventId:integer,url:string,preview:boolean
+
+
+npx sequelize model:generate --name Attendance --attributes eventId:integer,userId:integer,status:enum
