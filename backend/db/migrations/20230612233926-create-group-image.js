@@ -1,5 +1,11 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
+
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('GroupImages', {
@@ -11,7 +17,8 @@ module.exports = {
       },
       groupId: {
         type: Sequelize.INTEGER,
-        references: {model:'Groups'}
+        references: {model:'Groups'},
+        onDelete: 'CASCADE'
       },
       url: {
         type: Sequelize.STRING
@@ -30,6 +37,7 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('GroupImages');
+    options.tableName = 'GroupImages';
+    return queryInterface.dropTable(options);
   }
 };
