@@ -11,6 +11,7 @@ const router = express.Router();
 
 
 router.get('/', async (req, res) => {
+    //test
     let Groups = await Group.findAll();
     for (let i = 0; i < Groups.length;i++){
         let mmbrs = await Groups[i].countUsers();
