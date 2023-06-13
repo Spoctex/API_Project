@@ -16,27 +16,32 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {model: 'Users'},
         onDelete: 'CASCADE'
       },
       groupId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {model:'Groups'},
         onDelete: 'CASCADE'
       },
       status: {
+        allowNull: false,
         type: Sequelize.ENUM('member','co-host','left')
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    });
+    }, options);
   },
   async down(queryInterface, Sequelize) {
     options.tableName = 'Memberships';

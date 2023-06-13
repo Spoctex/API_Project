@@ -16,27 +16,32 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       eventId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {model:'Events'},
         onDelete: 'CASCADE'
       },
       userId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {model:'Users'},
         onDelete: 'CASCADE'
       },
       status: {
+        allowNull: false,
         type: Sequelize.ENUM('attending','not attending','undecided')
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    });
+    }, options);
   },
   async down(queryInterface, Sequelize) {
     options.tableName = 'Attendances';

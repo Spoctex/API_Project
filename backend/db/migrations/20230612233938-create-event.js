@@ -20,16 +20,19 @@ module.exports = {
         references: {model:'Venues'}
       },
       groupId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {model:'Groups'}
       },
       name: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       description: {
         type: Sequelize.TEXT
       },
       type: {
+        allowNull: false,
         type: Sequelize.ENUM('tech','sports','literature')
       },
       capacity: {
@@ -39,20 +42,24 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       startDate: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       endDate: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    });
+    }, options);
   },
   async down(queryInterface, Sequelize) {
     options.tableName = 'Events';
