@@ -20,7 +20,36 @@ module.exports = {
     */
     options.tableName = 'Events';
     return queryInterface.bulkInsert(options, [
-
+      {
+        venueId:1,
+        groupId:2,
+        name:'name1',
+        description:'description1',
+        type:'tech1',
+        capacity:1,
+        price:20.91,
+        startDate: '2023-12-19 03:00:01',
+        endDate: '2023-12-19 08:00:02',
+      },
+      {
+        venueId:2,
+        groupId:1,
+        name:'name2',
+        description:'description2',
+        type:'sports2',
+        capacity:2,
+        price:20.92,
+        startDate: '2023-12-19 03:00:03',
+        endDate: '2023-12-19 08:00:04',
+      },
+      {
+        venueId:1,
+        groupId:1,
+        name:'name3',
+        type:'literature',
+        startDate: '2023-12-19 03:00:05',
+        endDate: '2023-12-19 08:00:06',
+      }
     ], {});
   },
 
@@ -34,7 +63,7 @@ module.exports = {
     options.tableName = 'Events';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      x: { [Op.in]: [] }
+      name: { [Op.in]: ['name1','name2','name3'] }
     }, {});
   }
 };

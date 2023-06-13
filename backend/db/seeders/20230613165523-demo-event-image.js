@@ -20,7 +20,21 @@ module.exports = {
     */
     options.tableName = 'EventImages';
     return queryInterface.bulkInsert(options, [
-
+      {
+        eventId:1,
+        url:'www.google.com/4',
+        preview:true
+      },
+      {
+        eventId:1,
+        url:'www.google.com/5',
+        preview:false
+      },
+      {
+        eventId:2,
+        url:'www.google.com/6',
+        preview:true
+      }
     ], {});
   },
 
@@ -34,7 +48,7 @@ module.exports = {
     options.tableName = 'EventImages';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      x: { [Op.in]: [] }
+      url: { [Op.in]: ['www.google.com/4','www.google.com/5','www.google.com/6'] }
     }, {});
   }
 };

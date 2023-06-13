@@ -20,7 +20,21 @@ module.exports = {
     */
     options.tableName = 'GroupImages';
     return queryInterface.bulkInsert(options, [
-
+      {
+        groupId:1,
+        url:'www.google.com/1',
+        preview:true
+      },
+      {
+        groupId:2,
+        url:'www.google.com/2',
+        preview:true
+      },
+      {
+        groupId:2,
+        url:'www.google.com/3',
+        preview:false
+      }
     ], {});
   },
 
@@ -34,7 +48,7 @@ module.exports = {
     options.tableName = 'GroupImages';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      x: { [Op.in]: [] }
+      url: { [Op.in]: ['www.google.com/1','www.google.com/2','www.google.com/3'] }
     }, {});
   }
 };

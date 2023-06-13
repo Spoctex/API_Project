@@ -20,7 +20,21 @@ module.exports = {
     */
     options.tableName = 'Attendances';
     return queryInterface.bulkInsert(options, [
-
+      {
+        eventId:1,
+        userId:2,
+        status:'not attending'
+      },
+      {
+        eventId:1,
+        userId:1,
+        status:'attending'
+      },
+      {
+        eventId:2,
+        userId:2,
+        status:'undecided'
+      },
     ], {});
   },
 
@@ -34,7 +48,7 @@ module.exports = {
     options.tableName = 'Attendances';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      x: { [Op.in]: [] }
+      userId: { [Op.in]: [1,2] }
     }, {});
   }
 };
