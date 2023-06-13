@@ -17,3 +17,27 @@ npx sequelize model:generate --name EventImage --attributes eventId:integer,url:
 
 
 npx sequelize model:generate --name Attendance --attributes eventId:integer,userId:integer,status:enum
+
+
+
+
+
+npx sequelize seed:generate --name demo-group
+
+
+npx sequelize seed:generate --name demo-membership
+
+
+npx sequelize seed:generate --name demo-venue
+
+
+npx sequelize seed:generate --name demo-group-image
+
+
+npx sequelize seed:generate --name demo-event
+
+
+npx sequelize seed:generate --name demo-event-image
+
+
+npx sequelize seed:generate --name demo-attendance
