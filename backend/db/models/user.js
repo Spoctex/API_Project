@@ -9,21 +9,36 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Group,
+        { foreignKey: 'organizerId' });
+      User.belongsToMany(models.Group,
+        {
+          through: models.Membership,
+          foreignKey: 'userId',
+          otherKey: 'groupId'
+       });
+      User.belongsToMany(models.Event,
+        {
+          through: models.Attendance,
+          foreignKey: 'userId',
+          otherKey: 'eventId'
+        });
+
     }
   }
   User.init({
-    firstName:{
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len:[3,30]
+        len: [3, 30]
       }
     },
     lastName: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [3,30]
+        len: [3, 30]
       }
     },
     username: {
@@ -59,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
     defaultScope: {
-      attributes:{
+      attributes: {
         exclude: ['hashedPassword', 'email', 'createdAt', 'updatedAt']
       }
     }

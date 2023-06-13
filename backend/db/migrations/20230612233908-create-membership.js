@@ -7,35 +7,29 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  up: async(queryInterface, Sequelize) => {
-    return queryInterface.createTable('Users', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Memberships', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      firstName: {
-        type: Sequelize.STRING(30),
-        allowNull: false
+      userId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {model: 'Users'},
+        onDelete: 'CASCADE'
       },
-      lastName: {
-        type: Sequelize.STRING(30),
-        allowNull: false
+      groupId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {model:'Groups'},
+        onDelete: 'CASCADE'
       },
-      username: {
-        type: Sequelize.STRING(30),
-        unique: true,
-        allowNull: false
-      },
-      email: {
-        type: Sequelize.STRING(256),
-        unique: true,
-        allowNull: false
-      },
-      hashedPassword: {
-        type: Sequelize.STRING.BINARY,
-        allowNull: false
+      status: {
+        allowNull: false,
+        type: Sequelize.ENUM('member','co-host','left')
       },
       createdAt: {
         allowNull: false,
@@ -50,7 +44,7 @@ module.exports = {
     }, options);
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Users';
+    options.tableName = 'Memberships';
     return queryInterface.dropTable(options);
   }
 };
