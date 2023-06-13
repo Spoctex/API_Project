@@ -5,6 +5,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { User } = require('../../db/models');
+const { nextTick } = require('process');
 
 const router = express.Router();
 
@@ -41,8 +42,14 @@ const validateSignup = [
 router.post(
     '/',
     validateSignup,
-    async (req, res) => {
+    async (req, res, next) => {
         const { email, password, username, firstName, lastName } = req.body;
+        let search = await User.findOne({ where: { email } });
+        if (search) {
+            let err = new Error('Email already in use');
+            err.status = 500;
+            return next(err);
+        }
         const hashedPassword = bcrypt.hashSync(password);
         const user = await User.create({ firstName, lastName, email, username, hashedPassword });
 
