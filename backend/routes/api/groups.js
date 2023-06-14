@@ -2,7 +2,7 @@ const express = require('express');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 const { check } = require('express-validator');
-const { groupEnums, states, handleValidationErrors, requireAuth } = require('../../utils')
+const { groupEnums, validStates, handleValidationErrors, requireAuth } = require('../../utils')
 const { Group, GroupImage, User, sequelize } = require('../../db/models');
 
 const router = express.Router();
@@ -23,8 +23,8 @@ router.get('/current', requireAuth, async (req, res) => {
 const validateNewGroup = [
     check('name')
         .exists({ checkFalsy: true })
-        .isLength({ max: 60 })
-        .withMessage('Please provide a valid name no more than 60 characters long.'),
+        .isLength({ max: 30 })
+        .withMessage('Please provide a valid name no more than 30 characters long.'),
     check('about')
         .exists({ checkFalsy: true })
         .isLength({ min: 50 })
@@ -42,22 +42,47 @@ const validateNewGroup = [
         .withMessage(`Your group type should be ${groupEnums.join(' or ')}`),
     check('state')
         .exists({ checkFalsy: true })
-        .isIn(states)
+        .isIn(validStates)
         .withMessage('Please provid a valid state (provide like "NY" or "AK")'),
     handleValidationErrors
 ];
 
 router.post('/', [requireAuth, validateNewGroup], async (req, res) => {
     let { name, about, type, private, city, state } = req.body;
-    console.log({ name, type, private, city, state, about })
     let newGroup = await Group.create({
         name, type, private, city, state, about,
         organizerId: req.user.id
     });
+    res.status(201);
     return res.json(newGroup);
 });
 
-router.get('/', async (req, res) => {
+router.put('/:id', [requireAuth, validateNewGroup], async (req, res, next) => {
+    let group = await Group.findByPk(req.params.id);
+    if (!group) {
+        let err = new Error('Group could not be found');
+        err.status = 404;
+        return next(err);
+    }
+    if (group.organizerId !== req.user.id) {
+        const err = new Error('Forbidden');
+        err.title = 'Forbidden';
+        err.errors = { message: 'Authorization required: Can only be done by the group owner' };
+        err.status = 403;
+        return next(err);
+    }
+    let { name, about, type, private, city, state } = req.body;
+    group.name = name;
+    group.about = about;
+    group.type = type;
+    group.private = private;
+    group.city = city;
+    group.state = state;
+    await group.save();
+    res.json(group);
+});
+
+router.get('/', async (_req, res) => {
     let Groups = await Group.findAll();
     for (let i = 0; i < Groups.length; i++) {
         let mmbrs = await Groups[i].countUsers();
@@ -93,7 +118,25 @@ router.get('/:id', async (req, res, next) => {
     group.Organizer = organizer;
     group.Venues = venues;
     res.json(group)
-})
+});
+
+router.delete('/:id', requireAuth, async(req,res,next)=>{
+    let group = await Group.findByPk(req.params.id);
+    if (!group) {
+        let err = new Error('Group could not be found');
+        err.status = 404;
+        return next(err);
+    }
+    if (group.organizerId !== req.user.id) {
+        const err = new Error('Forbidden');
+        err.title = 'Forbidden';
+        err.errors = { message: 'Authorization required: Can only be done by the group owner' };
+        err.status = 403;
+        return next(err);
+    }
+    group.destroy();
+    res.json({message: 'Successfully deleted'})
+});
 
 const validateNewImage = [
     check('url')
@@ -117,7 +160,7 @@ router.post('/:id/images', [requireAuth, validateNewImage], async (req, res, nex
     if (group.organizerId !== req.user.id) {
         const err = new Error('Forbidden');
         err.title = 'Forbidden';
-        err.errors = { message: 'Authorization required: Only the group owner can add images' };
+        err.errors = { message: 'Authorization required: Can only be done by the group owner' };
         err.status = 403;
         return next(err);
     }
