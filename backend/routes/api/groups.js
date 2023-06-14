@@ -134,7 +134,7 @@ router.delete('/:id', requireAuth, async(req,res,next)=>{
         err.status = 403;
         return next(err);
     }
-    group.destroy();
+    await group.destroy();
     res.json({message: 'Successfully deleted'})
 });
 
