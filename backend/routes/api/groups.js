@@ -2,15 +2,10 @@ const express = require('express');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
-const states = require('../../utils/validStates');
-const { groupEnums } = require('../../utils/validEnumArrays')
-
-const { setTokenCookie, restoreUser } = require('../../utils/auth');
+const { groupEnums, states, handleValidationErrors } = require('../../utils')
 const { Group, GroupImage, User, sequelize } = require('../../db/models');
 
 const router = express.Router();
-
 
 
 router.get('/current', async (req, res) => {
