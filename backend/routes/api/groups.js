@@ -94,7 +94,34 @@ router.get('/:id', async (req, res, next) => {
     res.json(group)
 })
 
+const validateNewImage= [
+    check('url')
+    .exists({checkFalsy: true})
+    .isURL()
+    .withMessage('Please provide valid image url.'),
+    check('preview')
+    .exists({checkFalsy:true})
+    .isBoolean()
+    .withMessage('Please indicate wether this is a preview image (true or false only).'),
+    handleValidationErrors
+]
 
+router.post('/:id/images', validateNewImage, async (req,res,next)=>{
+    let group = await Group.findByPk(req.params.id);
+    if (!group) {
+        let err = new Error('Group could not be found');
+        err.status = 404;
+        return next(err);
+    }
+    let {url,preview}=req.body;
+    let img = await group.createGroupImage({url,preview});
+    img=img.toJSON();
+    let rtrnImg = {};
+    rtrnImg.id = img.id;
+    rtrnImg.url = img.url;
+    rtrnImg.preview = img.preview;
+    return res.json(rtrnImg);
+});
 
 
 
