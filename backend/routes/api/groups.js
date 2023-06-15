@@ -303,7 +303,11 @@ const validateNewEvent = [
     check('price')
         .exists({ checkFalsy: true })
         .isDecimal()
-        .withMessage('Price must be decimal'),
+        .withMessage('Price must be decimal')
+        .custom(async (value, { req }) => {
+            value = value.toString().split('.');
+            if (value[1].length > 2 || (value[0] < 0 && value[1] < 0)) throw new Error('Please provide a valid price')
+        }),
     check('description')
         .exists({ checkFalsy: true })
         .withMessage('Description is required'),
@@ -358,8 +362,16 @@ router.post('/:id/events', [requireAuth, validateNewEvent], async (req, res, nex
         err.status = 403;
         return next(err);
     }
-
-    res.json({ message: 'valid' })
+    let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+    price = price.toString().split('.');
+    if (price[1].length < 2) {
+        while(price[1].length<2)price[1]+='0';
+    }
+    price = price.join('.');
+    let newEvent = await group.createEvent({ venueId, name, type, capacity, price, description, startDate, endDate });
+    delete newEvent.dataValues.createdAt;
+    delete newEvent.dataValues.updatedAt;
+    res.json(newEvent);
 });
 
 
