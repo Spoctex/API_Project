@@ -1,9 +1,7 @@
 const express = require('express');
-const { Op } = require('sequelize');
-const bcrypt = require('bcryptjs');
 const { check } = require('express-validator');
 const { groupEnums, validStates, handleValidationErrors, requireAuth } = require('../../utils')
-const { Group, GroupImage, User, sequelize } = require('../../db/models');
+const { Group } = require('../../db/models');
 
 const router = express.Router();
 
