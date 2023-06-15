@@ -174,6 +174,35 @@ router.post('/:id/images', [requireAuth, validateNewImage], async (req, res, nex
     return res.json(rtrnImg);
 });
 
+router.get('/:id/venues', requireAuth, async(req,res,next)=>{
+    let group = await Group.findByPk(req.params.id);
+    if (!group) {
+        let err = new Error('Group could not be found');
+        err.status = 404;
+        return next(err);
+    }
+    let cohosts = await group.getUsers();
+    cohosts = cohosts.reduce((acc,mmbr)=>{
+        if (mmbr.Membership.status==='co-host') {
+            acc.push(mmbr.id);
+        }
+        return acc;
+    },[])
+    if (![group.organizerId, ...cohosts].includes(req.user.id)) {
+        const err = new Error('Forbidden');
+        err.title = 'Forbidden';
+        err.errors = { message: 'Authorization required: Can only be done by the group owner or a co-host' };
+        err.status = 403;
+        return next(err);
+    }
+    let venues = await group.getVenues();
+    return res.json(venues);
+});
+
+
+
+
+
 
 
 
