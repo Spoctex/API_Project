@@ -253,7 +253,7 @@ router.post('/:id/venues', [requireAuth, validateNewVenue], async (req, res, nex
     return res.json(rtrnVenue)
 });
 
-router.get('/:id/events', async(req,res,next)=>{
+router.get('/:id/events', async (req, res, next) => {
     let group = await Group.findByPk(req.params.id);
     if (!group) {
         let err = new Error('Group could not be found');

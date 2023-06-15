@@ -51,11 +51,11 @@ router.put('/:id', [requireAuth, validateNewVenue], async (req, res, next) => {
         return next(err);
     }
     let { address, city, state, lat, lng } = req.body;
-    venue.address =address;
-    venue.city =city;
-    venue.state =state;
-    venue.lat =lat;
-    venue.lng =lng;
+    venue.address = address;
+    venue.city = city;
+    venue.state = state;
+    venue.lat = lat;
+    venue.lng = lng;
     await venue.save();
     venue = venue.toJSON();
     delete venue.updatedAt

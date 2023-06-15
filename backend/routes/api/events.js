@@ -1,7 +1,7 @@
 const express = require('express');
 const { check } = require('express-validator');
 const { validStates, handleValidationErrors, requireAuth, groupEnums } = require('../../utils')
-const { Event, Group, Venue } = require('../../db/models');
+const { Event, Group, Venue, EventImage } = require('../../db/models');
 
 const router = express.Router();
 
@@ -27,16 +27,29 @@ router.get('/', async (_req, res) => {
     res.json({ Events })
 });
 
-// router.get('/:id', async (req, res, next) => {
-//     let event = await Event.findByPk(req.params.id);
-//     if (!event){
-//         let err = new Error('Event could not be found');
-//         err.status = 404;
-//         return next(err);
-//     };
-
-//     res.json(event);
-// });
+router.get('/:id', async (req, res, next) => {
+    let event = await Event.findByPk(req.params.id, {
+        include: [{
+            model: Group,
+            attributes: ['id', 'name', 'private', 'city', 'state']
+        },
+        {
+            model: Venue,
+            attributes: ['id', 'address', 'city', 'state', 'lat', 'lng']
+        }, {
+            model: EventImage
+        }]
+    });
+    if (!event) {
+        let err = new Error('Event could not be found');
+        err.status = 404;
+        return next(err);
+    };
+    let invited = await event.getUsers();
+    let attending = invited.filter(async (user) => user.Attendance.status === "attending")
+    event.dataValues.attending = attending.length;
+    res.json(event);
+});
 
 
 
