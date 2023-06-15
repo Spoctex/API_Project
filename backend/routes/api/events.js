@@ -18,6 +18,11 @@ router.get('/', async (_req, res) => {
         }]
     });
     await Promise.all(Events.map(async (event) => {
+        if(event.price){let price = event.price.toString().split('.');
+        if (price[1].length < 2) {
+            while(price[1].length<2)price[1]+='0';
+        }
+        event.price = price.join('.');}
         let previewImage = await event.getEventImages({ where: { preview: true }, attributes: ['url'] });
         let invited = await event.getUsers();
         let attending = invited.filter(async (user) => user.Attendance.status === "attending");
@@ -48,6 +53,11 @@ router.get('/:id', async (req, res, next) => {
     let invited = await event.getUsers();
     let attending = invited.filter(async (user) => user.Attendance.status === "attending")
     event.dataValues.attending = attending.length;
+    if(event.price){let price = event.price.toString().split('.');
+    if (price[1].length < 2) {
+        while(price[1].length<2)price[1]+='0';
+    }
+    event.price = price.join('.');}
     res.json(event);
 });
 

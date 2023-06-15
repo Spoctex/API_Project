@@ -271,6 +271,11 @@ router.get('/:id/events', async (req, res, next) => {
         }]
     });
     await Promise.all(Events.map(async (event) => {
+        if(event.price){let price = event.price.toString().split('.');
+        if (price[1].length < 2) {
+            while(price[1].length<2)price[1]+='0';
+        }
+        event.price = price.join('.');}
         let previewImage = await event.getEventImages({ where: { preview: true }, attributes: ['url'] });
         let invited = await event.getUsers();
         let attending = invited.filter(async (user) => user.Attendance.status === "attending");
@@ -306,7 +311,6 @@ const validateNewEvent = [
         .withMessage('Price must be decimal')
         .custom(async (value, { req }) => {
             value = value.toString().split('.');
-            console.log(Number(value[0])<0)
             if (value[1].length > 2 || Number(value[0]) < 0) throw new Error('Please provide a valid price')
         }),
     check('description')
