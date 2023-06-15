@@ -120,7 +120,7 @@ router.get('/:id', async (req, res, next) => {
     res.json(group)
 });
 
-router.delete('/:id', requireAuth, async(req,res,next)=>{
+router.delete('/:id', requireAuth, async (req, res, next) => {
     let group = await Group.findByPk(req.params.id);
     if (!group) {
         let err = new Error('Group could not be found');
@@ -135,7 +135,7 @@ router.delete('/:id', requireAuth, async(req,res,next)=>{
         return next(err);
     }
     await group.destroy();
-    res.json({message: 'Successfully deleted'})
+    res.json({ message: 'Successfully deleted' })
 });
 
 const validateNewImage = [
@@ -174,7 +174,7 @@ router.post('/:id/images', [requireAuth, validateNewImage], async (req, res, nex
     return res.json(rtrnImg);
 });
 
-router.get('/:id/venues', requireAuth, async(req,res,next)=>{
+router.get('/:id/venues', requireAuth, async (req, res, next) => {
     let group = await Group.findByPk(req.params.id);
     if (!group) {
         let err = new Error('Group could not be found');
@@ -182,12 +182,12 @@ router.get('/:id/venues', requireAuth, async(req,res,next)=>{
         return next(err);
     }
     let cohosts = await group.getUsers();
-    cohosts = cohosts.reduce((acc,mmbr)=>{
-        if (mmbr.Membership.status==='co-host') {
+    cohosts = cohosts.reduce((acc, mmbr) => {
+        if (mmbr.Membership.status === 'co-host') {
             acc.push(mmbr.id);
         }
         return acc;
-    },[])
+    }, [])
     if (![group.organizerId, ...cohosts].includes(req.user.id)) {
         const err = new Error('Forbidden');
         err.title = 'Forbidden';
@@ -199,7 +199,61 @@ router.get('/:id/venues', requireAuth, async(req,res,next)=>{
     return res.json(venues);
 });
 
+const validateNewVenue = [
+    check('address')
+        .exists({ checkFalsy: true })
+        .withMessage('Please provide a valid address'),
+    check('city')
+        .exists({ checkFalsy: true })
+        .withMessage('Please provide a valid city.'),
+    check('state')
+        .exists({ checkFalsy: true })
+        .isIn(validStates)
+        .withMessage('Please provid a valid state (provide like "NY" or "AK")'),
+    check('lat')
+        .exists({ checkFalsy: true })
+        .isDecimal()
+        .withMessage('Latitude is not valid'),
+    check('lng')
+        .exists({ checkFalsy: true })
+        .isDecimal()
+        .withMessage('Longitude is not valid'),
+    handleValidationErrors
+];
 
+router.post('/:id/venues', [requireAuth, validateNewVenue], async (req, res, next) => {
+    let group = await Group.findByPk(req.params.id);
+    if (!group) {
+        let err = new Error('Group could not be found');
+        err.status = 404;
+        return next(err);
+    }
+    let cohosts = await group.getUsers();
+    cohosts = cohosts.reduce((acc, mmbr) => {
+        if (mmbr.Membership.status === 'co-host') {
+            acc.push(mmbr.id);
+        }
+        return acc;
+    }, [])
+    if (![group.organizerId, ...cohosts].includes(req.user.id)) {
+        const err = new Error('Forbidden');
+        err.title = 'Forbidden';
+        err.errors = { message: 'Authorization required: Can only be done by the group owner or a co-host' };
+        err.status = 403;
+        return next(err);
+    }
+    let { address, city, state, lat, lng } = req.body;
+    let newVenue = await group.createVenue({ address, city, state, lat, lng })
+    let rtrnVenue = {};
+    rtrnVenue.id = newVenue.id;
+    rtrnVenue.groupId = newVenue.groupId;
+    rtrnVenue.address = newVenue.address;
+    rtrnVenue.city = newVenue.city;
+    rtrnVenue.state = newVenue.state;
+    rtrnVenue.lat = newVenue.lat;
+    rtrnVenue.lng = newVenue.lng;
+    return res.json(rtrnVenue)
+});
 
 
 
