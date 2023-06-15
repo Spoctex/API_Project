@@ -146,7 +146,7 @@ const validateNewImage = [
         .isBoolean()
         .withMessage('Please indicate wether this is a preview image (true or false only).'),
     handleValidationErrors
-]
+];
 
 router.post('/:id/images', [requireAuth, validateNewImage], async (req, res, next) => {
     let group = await Group.findByPk(req.params.id);
