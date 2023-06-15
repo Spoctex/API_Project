@@ -1,7 +1,7 @@
 const express = require('express');
 const { check } = require('express-validator');
 const { groupEnums, validStates, handleValidationErrors, requireAuth } = require('../../utils')
-const { Group } = require('../../db/models');
+const { Group, Event, Venue } = require('../../db/models');
 
 const router = express.Router();
 
@@ -253,7 +253,32 @@ router.post('/:id/venues', [requireAuth, validateNewVenue], async (req, res, nex
     return res.json(rtrnVenue)
 });
 
-
+router.get('/:id/events', async(req,res,next)=>{
+    let group = await Group.findByPk(req.params.id);
+    if (!group) {
+        let err = new Error('Group could not be found');
+        err.status = 404;
+        return next(err);
+    };
+    let Events = await group.getEvents({
+        include: [{
+            model: Group,
+            attributes: ['id', 'name', 'city', 'state']
+        },
+        {
+            model: Venue,
+            attributes: ['id', 'city', 'state']
+        }]
+    });
+    await Promise.all(Events.map(async (event) => {
+        let previewImage = await event.getEventImages({ where: { preview: true }, attributes: ['url'] });
+        let invited = await event.getUsers();
+        let attending = invited.filter(async (user) => user.Attendance.status === "attending");
+        if (previewImage[0]) event.dataValues.previewImage = previewImage[0].url;
+        event.dataValues.attending = attending.length;
+    }));
+    res.json({ Events });
+});
 
 
 
