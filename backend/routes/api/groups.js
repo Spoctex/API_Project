@@ -1,7 +1,7 @@
 const express = require('express');
 const { check } = require('express-validator');
-const { groupEnums, validStates, handleValidationErrors, requireAuth, eventEnums } = require('../../utils')
-const { Group, Event, Venue, Membership } = require('../../db/models');
+const { groupEnums, validStates, handleValidationErrors, requireAuth, eventEnums, memberEnums } = require('../../utils')
+const { Group, User, Venue, Membership } = require('../../db/models');
 const { Op } = require('sequelize');
 
 const router = express.Router();
@@ -428,7 +428,6 @@ router.post('/:id/membership', requireAuth, async (req, res, next) => {
     let membersId = members.map(mmbr => mmbr.id);
     console.log(req.user.id, group.organizerId, membersId)
     if ([group.organizerId, ...membersId].includes(req.user.id)) {
-        console.log('is member')
         let err = new Error('User is already a part of the group');
         err.status = 400;
         for (let i = 0; i < members.length; i++) {
@@ -450,7 +449,76 @@ router.post('/:id/membership', requireAuth, async (req, res, next) => {
     });
 });
 
+const validateMembership = [
+    check('memberId')
+        .exists({ checkFalsy: true })
+        .isInt()
+        .withMessage('Please provide a valid memberId')
+        .custom(async (val, { req }) => {
+            let user = await User.findByPk(val);
+            if (!user) throw new Error('User cannot be found');
+        }),
+    check('status')
+        .exists({ checkFalsy: true })
+        .isIn(memberEnums)
+        .withMessage('Please provide at valid status like member or co-host')
+        .custom(async (val, { req }) => {
+            if (val === 'pending') throw new Error('Cannot change status to pending')
+        }),
+    handleValidationErrors
+]
 
+router.put('/:id/membership', [requireAuth, validateMembership], async (req, res, next) => {
+    let group = await Group.findByPk(req.params.id);
+    if (!group) {
+        let err = new Error('Group could not be found');
+        err.status = 404;
+        return next(err);
+    }
+    let cohosts = await group.getUsers();
+    cohosts = cohosts.reduce((acc, mmbr) => {
+        if (mmbr.Membership.status === 'co-host') {
+            acc.push(mmbr.id);
+        }
+        return acc;
+    }, []);
+    let membership = await Membership.findOne({
+        where: {
+            [Op.and]: [{ userId: req.body.memberId }, { groupId: group.id }]
+        },
+        attributes: { include: ['id'] }
+    });
+    if (!membership) {
+        let err = new Error(`Membership between user and group doesn't exist`);
+        err.status = 404;
+        return next(err);
+    }
+    if (req.body.status === 'member' && [group.organizerId, ...cohosts].includes(req.user.id)) {
+        membership.status = req.body.status;
+        membership.save();
+        return res.json({
+            id: membership.id,
+            groupId: group.id,
+            memberId: req.body.memberId,
+            status: req.body.status
+        });
+    }
+    if (req.body.status === 'co-host' && req.user.id === group.organizerId) {
+        membership.status = req.body.status;
+        membership.save();
+        return res.json({
+            id: membership.id,
+            groupId: group.id,
+            memberId: req.body.memberId,
+            status: req.body.status
+        });
+    }
+    const err = new Error('Forbidden');
+    err.title = 'Forbidden';
+    err.errors = { message: 'Authorization required' };
+    err.status = 403;
+    return next(err);
+});
 
 
 
