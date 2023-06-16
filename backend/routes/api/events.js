@@ -1,7 +1,8 @@
 const express = require('express');
 const { check } = require('express-validator');
-const { handleValidationErrors, requireAuth, eventEnums } = require('../../utils')
-const { Event, Group, Venue, EventImage } = require('../../db/models');
+const { handleValidationErrors, requireAuth, eventEnums } = require('../../utils');
+const { Event, Group, Venue, EventImage, Attendance } = require('../../db/models');
+const { Op } = require('sequelize');
 
 const router = express.Router();
 
@@ -267,6 +268,48 @@ router.get('/:id/attendees', async (req, res, next) => {
         return acc;
     }, []);
     return res.json(Attendees);
+});
+
+router.post('/:id/attendance', requireAuth, async (req, res, next) => {
+    let event = await Event.findByPk(req.params.id);
+    if (!event) {
+        let err = new Error('Event could not be found');
+        err.status = 404;
+        return next(err);
+    };
+    let group = await event.getGroup();
+    let members = await group.getUsers();
+    members = members.reduce((acc, mmbr) => {
+        acc.push(mmbr.id);
+        return acc;
+    }, []);
+    if (![group.organizerId, ...members].includes(req.user.id)) {
+        const err = new Error('Forbidden');
+        err.title = 'Forbidden';
+        err.errors = { message: 'Authorization required' };
+        err.status = 403;
+        return next(err);
+    }
+    let attendance = await Attendance.findOne({
+        where: {
+            [Op.and]: [{ userId: req.user.id }, { eventId: event.id }]
+        }
+    });
+    if (attendance) {
+        let err = new Error('Attendance has already been requested');
+        err.status = 400;
+        if (attendance.status !== 'undecided') err.message = 'Attendance has already been decided';
+        return next(err);
+    }
+    let newAttendance = await Attendance.create({
+        userId: req.user.id,
+        eventId: event.id,
+        status:'undecided'
+    });
+    return res.json({
+        userId: req.user.id,
+        status:'pending'
+    })
 });
 
 
