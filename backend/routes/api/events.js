@@ -212,7 +212,32 @@ router.put('/:id', [requireAuth, validateNewEvent], async (req, res, next) => {
     return res.json(event);
 });
 
-
+router.delete('/:id',requireAuth,async(req,res,next)=>{
+    let event = await Event.findByPk(req.params.id);
+    if (!event) {
+        let err = new Error('Event could not be found');
+        err.status = 404;
+        return next(err);
+    };
+    let group = await event.getGroup();
+    let cohosts = await group.getUsers();
+    cohosts = cohosts.reduce((acc, mmbr) => {
+        if (mmbr.Membership.status === 'co-host') {
+            acc.push(mmbr.id);
+        }
+        return acc;
+    }, []);
+    console.log(group.organizerId, cohosts)
+    if (![group.organizerId, ...cohosts].includes(req.user.id)) {
+        const err = new Error('Forbidden');
+        err.title = 'Forbidden';
+        err.errors = { message: 'Authorization required: Can only be done by the group host or a co-host' };
+        err.status = 403;
+        return next(err);
+    }
+    event.destroy();
+    return res.json({message: 'Successfully deleted'});
+});
 
 
 
