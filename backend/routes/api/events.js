@@ -374,6 +374,49 @@ router.put('/:id/attendance', [requireAuth, validateAttendance], async (req, res
     });
 });
 
+const findUser = [
+    check('userId')
+        .exists({ checkFalsy: true })
+        .isInt()
+        .withMessage('Please provide a valid userId')
+        .custom(async (val, { req }) => {
+            let user = await User.findByPk(val);
+            if (!user) throw new Error('User cannot be found');
+        }),
+    handleValidationErrors
+];
+
+router.delete('/:id/attendance', [requireAuth, findUser], async (req, res, next) => {
+    let event = await Event.findByPk(req.params.id);
+    if (!event) {
+        let err = new Error('Event could not be found');
+        err.status = 404;
+        return next(err);
+    };
+    let group = await event.getGroup();
+    if (group.organizerId !== req.user.id && req.user.id !== req.body.userId) {
+        const err = new Error('Forbidden');
+        err.title = 'Forbidden';
+        err.errors = { message: 'Authorization required: Only the User or organizer may delete an attendance' };
+        err.status = 403;
+        return next(err);
+    }
+    let attendance = await Attendance.findOne({
+        where: {
+            [Op.and]: [{ userId: req.body.userId }, { eventId: event.id }]
+        },
+        attributes: { include: ['id'] }
+    });
+    if (!attendance) {
+        let err = new Error(`Attendance between user and event doesn't exist`);
+        err.status = 404;
+        return next(err);
+    }
+    attendance.destroy();
+    return res.json({ message: 'Successfully deleted attendance from event' });
+
+});
+
 
 
 

@@ -558,7 +558,7 @@ router.delete('/:id/membership', [requireAuth, findUser], async (req, res, next)
         return next(err);
     }
     membership.destroy();
-    return res.json({ message: 'Successfully deleted membership from group' })
+    return res.json({ message: 'Successfully deleted membership from group' });
 });
 
 
