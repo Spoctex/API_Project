@@ -7,7 +7,34 @@ const { Op } = require('sequelize');
 const router = express.Router();
 
 
-router.get('/', async (_req, res) => {
+const queryValidation = [
+    check('size')
+        .custom(async (_val, { req }) => {
+            if (isNaN(req.query.size) && typeof req.query.size !== 'undefined') throw new Error('Size must be a number');
+            if (Number(req.query.size) < 1) throw new Error('Size must be greater than or equal to 1');
+            if (Number(req.query.size) > 20) throw new Error('Size must be less than or equal to 20');
+        }),
+    check('page')
+        .custom(async (_val, { req }) => {
+            if (isNaN(req.query.page) && typeof req.query.page !== 'undefined') throw new Error('Page must be a number');
+            if (Number(req.query.page) < 1) throw new Error('Page must be greater than or equal to 1');
+            if (Number(req.query.page) > 10) throw new Error('Page must be less than or equal to 10');
+        }),
+    handleValidationErrors
+];
+
+router.get('/', queryValidation, async (req, res) => {
+    let { page, size } = req.query;
+    let pagination = {};
+    const defaultSize = 20;
+    const defaultPage = 1;
+    if (!page) page = defaultPage;
+    if (!size) size = defaultSize;
+    page = Math.round(page)
+    size = Math.round(size)
+    pagination.limit = size;
+    pagination.offset = (page - 1) * size;
+    console.log(pagination)
     let Events = await Event.findAll({
         include: [{
             model: Group,
@@ -16,7 +43,8 @@ router.get('/', async (_req, res) => {
         {
             model: Venue,
             attributes: ['id', 'city', 'state']
-        }]
+        }],
+        ...pagination
     });
     await Promise.all(Events.map(async (event) => {
         if (event.price) {
@@ -32,6 +60,13 @@ router.get('/', async (_req, res) => {
         if (previewImage[0]) event.dataValues.previewImage = previewImage[0].url;
         event.dataValues.attending = attending.length;
     }));
+
+
+
+
+
+
+
     return res.json({ Events })
 });
 
