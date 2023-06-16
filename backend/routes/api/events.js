@@ -18,11 +18,13 @@ router.get('/', async (_req, res) => {
         }]
     });
     await Promise.all(Events.map(async (event) => {
-        if(event.price){let price = event.price.toString().split('.');
-        if (price[1].length < 2) {
-            while(price[1].length<2)price[1]+='0';
+        if (event.price) {
+            let price = event.price.toString().split('.');
+            if (price[1].length < 2) {
+                while (price[1].length < 2) price[1] += '0';
+            }
+            event.price = price.join('.');
         }
-        event.price = price.join('.');}
         let previewImage = await event.getEventImages({ where: { preview: true }, attributes: ['url'] });
         let invited = await event.getUsers();
         let attending = invited.filter(async (user) => user.Attendance.status === "attending");
@@ -53,11 +55,13 @@ router.get('/:id', async (req, res, next) => {
     let invited = await event.getUsers();
     let attending = invited.filter(async (user) => user.Attendance.status === "attending")
     event.dataValues.attending = attending.length;
-    if(event.price){let price = event.price.toString().split('.');
-    if (price[1].length < 2) {
-        while(price[1].length<2)price[1]+='0';
+    if (event.price) {
+        let price = event.price.toString().split('.');
+        if (price[1].length < 2) {
+            while (price[1].length < 2) price[1] += '0';
+        }
+        event.price = price.join('.');
     }
-    event.price = price.join('.');}
     return res.json(event);
 });
 
@@ -90,7 +94,7 @@ router.post('/:id/images', [requireAuth, validateNewImage], async (req, res, nex
     }, []);
     let invited = await event.getUsers();
     let attending = invited.reduce((acc, user) => {
-        if (user.Attendance.status === "attending"){
+        if (user.Attendance.status === "attending") {
             acc.push(user.id);
         }
         return acc;
@@ -102,8 +106,8 @@ router.post('/:id/images', [requireAuth, validateNewImage], async (req, res, nex
         err.status = 403;
         return next(err);
     }
-    let {url, preview} = req.body;
-    let newImg = await event.createEventImage({url,preview});
+    let { url, preview } = req.body;
+    let newImg = await event.createEventImage({ url, preview });
     delete newImg.dataValues.eventId;
     delete newImg.dataValues.updatedAt;
     delete newImg.dataValues.createdAt;
@@ -136,7 +140,7 @@ const validateNewEvent = [
         .withMessage('Price must be decimal')
         .custom(async (value, { req }) => {
             value = value.toString().split('.');
-            console.log(Number(value[0])<0)
+            console.log(Number(value[0]) < 0)
             if (value[1].length > 2 || Number(value[0]) < 0) throw new Error('Please provide a valid price')
         }),
     check('description')
@@ -172,7 +176,7 @@ const validateNewEvent = [
     handleValidationErrors
 ];
 
-router.put('/:id',[requireAuth,validateNewEvent],async(req,res,next)=>{
+router.put('/:id', [requireAuth, validateNewEvent], async (req, res, next) => {
     let event = await Event.findByPk(req.params.id);
     if (!event) {
         let err = new Error('Event could not be found');
@@ -194,15 +198,15 @@ router.put('/:id',[requireAuth,validateNewEvent],async(req,res,next)=>{
         err.status = 403;
         return next(err);
     }
-    let {venueId,name,type,capacity,price,description,startDate,endDate} = req.body;
-    event.venueId =venueId;
-    event.name =name;
-    event.type =type;
-    event.capacity =capacity;
-    event.price =price;
-    event.description =description;
-    event.startDate =startDate;
-    event.endDate =endDate;
+    let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+    event.venueId = venueId;
+    event.name = name;
+    event.type = type;
+    event.capacity = capacity;
+    event.price = price;
+    event.description = description;
+    event.startDate = startDate;
+    event.endDate = endDate;
     await event.save();
     delete event.dataValues.updatedAt;
     return res.json(event);

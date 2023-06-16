@@ -1,7 +1,7 @@
 const express = require('express');
 const { check } = require('express-validator');
 const { groupEnums, validStates, handleValidationErrors, requireAuth, eventEnums } = require('../../utils')
-const { Group, Event, Venue } = require('../../db/models');
+const { Group, Event, Venue, Membership } = require('../../db/models');
 const { Op } = require('sequelize');
 
 const router = express.Router();
@@ -397,7 +397,7 @@ router.get('/:id/members', async (req, res) => {
         return acc;
     }, [])
     let auth = false;
-    if (req.user && [group.organizerId, ...cohosts].includes(req.user.id)){
+    if (req.user && [group.organizerId, ...cohosts].includes(req.user.id)) {
         auth = true;
     }
     let members = await group.getUsers({
@@ -406,17 +406,49 @@ router.get('/:id/members', async (req, res) => {
                 ['username']
         }
     });
-    members = members.reduce((acc,mmbr) => {
+    members = members.reduce((acc, mmbr) => {
         mmbr = mmbr.toJSON();
         delete mmbr.Membership["groupId"];
         delete mmbr.Membership.userId;
         acc.push(mmbr);
-        if(!auth && mmbr.Membership.status === 'left')acc.pop();
+        if (!auth && mmbr.Membership.status === 'left') acc.pop();
         return acc;
-    },[]);
+    }, []);
     return res.json(members);
 });
 
+router.post('/:id/membership', requireAuth, async (req, res, next) => {
+    let group = await Group.findByPk(req.params.id);
+    if (!group) {
+        let err = new Error('Group could not be found');
+        err.status = 404;
+        return next(err);
+    }
+    let members = await group.getUsers();
+    let membersId = members.map(mmbr => mmbr.id);
+    console.log(req.user.id, group.organizerId, membersId)
+    if ([group.organizerId, ...membersId].includes(req.user.id)) {
+        console.log('is member')
+        let err = new Error('User is already a part of the group');
+        err.status = 400;
+        for (let i = 0; i < members.length; i++) {
+            if (members[i].Membership.userId === req.user.id && members[i].Membership.status === 'left') {
+                err.message = 'Membership has already been requested';
+                break;
+            }
+        }
+        return next(err);
+    }
+    let memReq = await Membership.create({
+        userId: req.user.id,
+        groupId: group.id,
+        status: 'left'
+    });
+    return res.json({
+        memberId: req.user.id,
+        status: 'pending'
+    });
+});
 
 
 
