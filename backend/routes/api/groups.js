@@ -2,6 +2,7 @@ const express = require('express');
 const { check } = require('express-validator');
 const { groupEnums, validStates, handleValidationErrors, requireAuth, eventEnums } = require('../../utils')
 const { Group, Event, Venue } = require('../../db/models');
+const { Op } = require('sequelize');
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ router.get('/current', requireAuth, async (req, res) => {
         Groups[i].numMembers = mmbrs;
         if (prevImg[0]) Groups[i].previewImage = prevImg[0].url;
     }
-    res.json({ Groups })
+    return res.json({ Groups })
 });
 
 const validateNewGroup = [
@@ -77,7 +78,7 @@ router.put('/:id', [requireAuth, validateNewGroup], async (req, res, next) => {
     group.city = city;
     group.state = state;
     await group.save();
-    res.json(group);
+    return res.json(group);
 });
 
 router.get('/', async (_req, res) => {
@@ -89,7 +90,7 @@ router.get('/', async (_req, res) => {
         if (previewImg[0]) Groups[i].previewImage = previewImg[0].url;
         Groups[i].numMembers = mmbrs;
     }
-    res.json({ Groups })
+    return res.json({ Groups })
 });
 
 router.get('/:id', async (req, res, next) => {
@@ -115,7 +116,7 @@ router.get('/:id', async (req, res, next) => {
     group.GroupImages = imgs;
     group.Organizer = organizer;
     group.Venues = venues;
-    res.json(group)
+    return res.json(group)
 });
 
 router.delete('/:id', requireAuth, async (req, res, next) => {
@@ -133,7 +134,7 @@ router.delete('/:id', requireAuth, async (req, res, next) => {
         return next(err);
     }
     await group.destroy();
-    res.json({ message: 'Successfully deleted' })
+    return res.json({ message: 'Successfully deleted' })
 });
 
 const validateNewImage = [
@@ -271,18 +272,20 @@ router.get('/:id/events', async (req, res, next) => {
         }]
     });
     await Promise.all(Events.map(async (event) => {
-        if(event.price){let price = event.price.toString().split('.');
-        if (price[1].length < 2) {
-            while(price[1].length<2)price[1]+='0';
+        if (event.price) {
+            let price = event.price.toString().split('.');
+            if (price[1].length < 2) {
+                while (price[1].length < 2) price[1] += '0';
+            }
+            event.price = price.join('.');
         }
-        event.price = price.join('.');}
         let previewImage = await event.getEventImages({ where: { preview: true }, attributes: ['url'] });
         let invited = await event.getUsers();
         let attending = invited.filter(async (user) => user.Attendance.status === "attending");
         if (previewImage[0]) event.dataValues.previewImage = previewImage[0].url;
         event.dataValues.attending = attending.length;
     }));
-    res.json({ Events });
+    return res.json({ Events });
 });
 
 const validateNewEvent = [
@@ -311,7 +314,7 @@ const validateNewEvent = [
         .withMessage('Price must be decimal')
         .custom(async (value, { req }) => {
             value = value.toString().split('.');
-            if (value[1].length > 2 || Number(value[0]) < 0) throw new Error('Please provide a valid price')
+            if (value[1].length > 2 || Number(value[0]) < 0) throw new Error('Please provide a valid price');
         }),
     check('description')
         .exists({ checkFalsy: true })
@@ -370,14 +373,54 @@ router.post('/:id/events', [requireAuth, validateNewEvent], async (req, res, nex
     let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
     price = price.toString().split('.');
     if (price[1].length < 2) {
-        while(price[1].length<2)price[1]+='0';
+        while (price[1].length < 2) price[1] += '0';
     }
     price = price.join('.');
     let newEvent = await group.createEvent({ venueId, name, type, capacity, price, description, startDate, endDate });
     delete newEvent.dataValues.createdAt;
     delete newEvent.dataValues.updatedAt;
-    res.json(newEvent);
+    return res.json(newEvent);
 });
+
+router.get('/:id/members', async (req, res) => {
+    let group = await Group.findByPk(req.params.id);
+    if (!group) {
+        let err = new Error('Group could not be found');
+        err.status = 404;
+        return next(err);
+    }
+    let cohosts = await group.getUsers();
+    cohosts = cohosts.reduce((acc, mmbr) => {
+        if (mmbr.Membership.status === 'co-host') {
+            acc.push(mmbr.id);
+        }
+        return acc;
+    }, [])
+    let auth = false;
+    if (req.user && [group.organizerId, ...cohosts].includes(req.user.id)){
+        auth = true;
+    }
+    let members = await group.getUsers({
+        attributes: {
+            exclude:
+                ['username']
+        }
+    });
+    members = members.reduce((acc,mmbr) => {
+        mmbr = mmbr.toJSON();
+        delete mmbr.Membership["groupId"];
+        delete mmbr.Membership.userId;
+        acc.push(mmbr);
+        if(!auth && mmbr.Membership.status === 'left')acc.pop();
+        return acc;
+    },[]);
+    return res.json(members);
+});
+
+
+
+
+
 
 
 

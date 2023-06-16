@@ -29,7 +29,7 @@ router.get('/', async (_req, res) => {
         if (previewImage[0]) event.dataValues.previewImage = previewImage[0].url;
         event.dataValues.attending = attending.length;
     }));
-    res.json({ Events })
+    return res.json({ Events })
 });
 
 router.get('/:id', async (req, res, next) => {
@@ -58,7 +58,7 @@ router.get('/:id', async (req, res, next) => {
         while(price[1].length<2)price[1]+='0';
     }
     event.price = price.join('.');}
-    res.json(event);
+    return res.json(event);
 });
 
 const validateNewImage = [
@@ -107,7 +107,7 @@ router.post('/:id/images', [requireAuth, validateNewImage], async (req, res, nex
     delete newImg.dataValues.eventId;
     delete newImg.dataValues.updatedAt;
     delete newImg.dataValues.createdAt;
-    res.json(newImg);
+    return res.json(newImg);
 });
 
 const validateNewEvent = [
@@ -205,7 +205,7 @@ router.put('/:id',[requireAuth,validateNewEvent],async(req,res,next)=>{
     event.endDate =endDate;
     await event.save();
     delete event.dataValues.updatedAt;
-    res.json(event);
+    return res.json(event);
 });
 
 
