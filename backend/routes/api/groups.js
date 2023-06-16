@@ -466,7 +466,7 @@ const validateMembership = [
             if (val === 'pending') throw new Error('Cannot change status to pending')
         }),
     handleValidationErrors
-]
+];
 
 router.put('/:id/membership', [requireAuth, validateMembership], async (req, res, next) => {
     let group = await Group.findByPk(req.params.id);

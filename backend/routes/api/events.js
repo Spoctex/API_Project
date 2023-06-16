@@ -1,7 +1,7 @@
 const express = require('express');
 const { check } = require('express-validator');
-const { handleValidationErrors, requireAuth, eventEnums } = require('../../utils');
-const { Event, Group, Venue, EventImage, Attendance } = require('../../db/models');
+const { handleValidationErrors, requireAuth, eventEnums, attendEnums } = require('../../utils');
+const { Event, Group, Venue, EventImage, Attendance, User } = require('../../db/models');
 const { Op } = require('sequelize');
 
 const router = express.Router();
@@ -301,17 +301,78 @@ router.post('/:id/attendance', requireAuth, async (req, res, next) => {
         if (attendance.status !== 'undecided') err.message = 'Attendance has already been decided';
         return next(err);
     }
-    let newAttendance = await Attendance.create({
+    await Attendance.create({
         userId: req.user.id,
         eventId: event.id,
-        status:'undecided'
+        status: 'undecided'
     });
     return res.json({
         userId: req.user.id,
-        status:'pending'
+        status: 'pending'
     })
 });
 
+const validateAttendance = [
+    check('userId')
+        .exists({ checkFalsy: true })
+        .isInt()
+        .withMessage('Please provide a valid userId')
+        .custom(async (val, { req }) => {
+            let user = await User.findByPk(val);
+            if (!user) throw new Error('User cannot be found');
+        }),
+    check('status')
+        .exists({ checkFalsy: true })
+        .isIn(attendEnums)
+        .withMessage('Please provide at valid status like attending or not attending')
+        .custom(async (val, { req }) => {
+            if (val === 'pending' || val === 'undecided') throw new Error('Cannot change status to pending')
+        }),
+    handleValidationErrors
+];
+
+router.put('/:id/attendance', [requireAuth, validateAttendance], async (req, res, next) => {
+    let event = await Event.findByPk(req.params.id);
+    if (!event) {
+        let err = new Error('Event could not be found');
+        err.status = 404;
+        return next(err);
+    };
+    let group = await event.getGroup();
+    let cohosts = await group.getUsers();
+    cohosts = cohosts.reduce((acc, mmbr) => {
+        if (mmbr.Membership.status === 'co-host') {
+            acc.push(mmbr.id);
+        }
+        return acc;
+    }, []);
+    if (![group.organizerId, ...cohosts].includes(req.user.id)) {
+        const err = new Error('Forbidden');
+        err.title = 'Forbidden';
+        err.errors = { message: 'Authorization required: Can only be done by the group host or a co-host' };
+        err.status = 403;
+        return next(err);
+    }
+    let attendance = await Attendance.findOne({
+        where: {
+            [Op.and]: [{ userId: req.user.id }, { eventId: event.id }]
+        },
+        attributes: { include: ['id'] }
+    });
+    if (!attendance) {
+        let err = new Error(`Attendance between user and event doesn't exist`);
+        err.status = 404;
+        return next(err);
+    }
+    attendance.status = req.body.status;
+    attendance.save();
+    return res.json({
+        id: attendance.id,
+        eventId: req.params.id,
+        userId: req.user.id,
+        status: req.body.status
+    });
+});
 
 
 
