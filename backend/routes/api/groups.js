@@ -520,6 +520,47 @@ router.put('/:id/membership', [requireAuth, validateMembership], async (req, res
     return next(err);
 });
 
+let findUser = [
+    check('memberId')
+        .exists({ checkFalsy: true })
+        .isInt()
+        .withMessage('Please provide a valid memberId')
+        .custom(async (val, { req }) => {
+            let user = await User.findByPk(val);
+            if (!user) throw new Error('User cannot be found');
+        }),
+    handleValidationErrors
+];
+
+router.delete('/:id/membership', [requireAuth, findUser], async (req, res, next) => {
+    let group = await Group.findByPk(req.params.id);
+    if (!group) {
+        let err = new Error('Group could not be found');
+        err.status = 404;
+        return next(err);
+    }
+    if (group.organizerId !== req.user.id && req.user.id !== req.body.memberId) {
+        const err = new Error('Forbidden');
+        err.title = 'Forbidden';
+        err.errors = { message: 'Authorization required' };
+        err.status = 403;
+        return next(err);
+    }
+    let membership = await Membership.findOne({
+        where: {
+            [Op.and]: [{ userId: req.body.memberId }, { groupId: group.id }]
+        },
+        attributes: { include: ['id'] }
+    });
+    if (!membership) {
+        let err = new Error(`Membership between user and group doesn't exist`);
+        err.status = 404;
+        return next(err);
+    }
+    membership.destroy();
+    return res.json({ message: 'Successfully deleted membership from group' })
+});
+
 
 
 
