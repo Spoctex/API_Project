@@ -235,7 +235,7 @@ router.delete('/:id', requireAuth, async (req, res, next) => {
         err.status = 403;
         return next(err);
     }
-    event.destroy();
+    await event.destroy();
     return res.json({ message: 'Successfully deleted' });
 });
 
@@ -412,7 +412,7 @@ router.delete('/:id/attendance', [requireAuth, findUser], async (req, res, next)
         err.status = 404;
         return next(err);
     }
-    attendance.destroy();
+    await attendance.destroy();
     return res.json({ message: 'Successfully deleted attendance from event' });
 
 });
