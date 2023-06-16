@@ -212,7 +212,7 @@ router.put('/:id', [requireAuth, validateNewEvent], async (req, res, next) => {
     return res.json(event);
 });
 
-router.delete('/:id',requireAuth,async(req,res,next)=>{
+router.delete('/:id', requireAuth, async (req, res, next) => {
     let event = await Event.findByPk(req.params.id);
     if (!event) {
         let err = new Error('Event could not be found');
@@ -227,7 +227,6 @@ router.delete('/:id',requireAuth,async(req,res,next)=>{
         }
         return acc;
     }, []);
-    console.log(group.organizerId, cohosts)
     if (![group.organizerId, ...cohosts].includes(req.user.id)) {
         const err = new Error('Forbidden');
         err.title = 'Forbidden';
@@ -236,8 +235,42 @@ router.delete('/:id',requireAuth,async(req,res,next)=>{
         return next(err);
     }
     event.destroy();
-    return res.json({message: 'Successfully deleted'});
+    return res.json({ message: 'Successfully deleted' });
 });
+
+router.get('/:id/attendees', async (req, res, next) => {
+    let event = await Event.findByPk(req.params.id);
+    if (!event) {
+        let err = new Error('Event could not be found');
+        err.status = 404;
+        return next(err);
+    };
+    let group = await event.getGroup();
+    let cohosts = await group.getUsers();
+    cohosts = cohosts.reduce((acc, mmbr) => {
+        if (mmbr.Membership.status === 'co-host') {
+            acc.push(mmbr.id);
+        }
+        return acc;
+    }, []);
+    let auth = false;
+    if (req.user && [group.organizerId, ...cohosts].includes(req.user.id)) {
+        auth = true;
+    }
+    let Attendees = await event.getUsers();
+    Attendees = Attendees.reduce((acc, user) => {
+        user = user.toJSON();
+        delete user.Attendance.eventId;
+        delete user.Attendance.userId;
+        acc.push(user);
+        if (!auth && user.Attendance.status === 'undecided') acc.pop();
+        return acc;
+    }, []);
+    return res.json(Attendees);
+});
+
+
+
 
 
 

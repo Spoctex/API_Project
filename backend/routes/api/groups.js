@@ -395,7 +395,7 @@ router.get('/:id/members', async (req, res) => {
             acc.push(mmbr.id);
         }
         return acc;
-    }, [])
+    }, []);
     let auth = false;
     if (req.user && [group.organizerId, ...cohosts].includes(req.user.id)) {
         auth = true;
