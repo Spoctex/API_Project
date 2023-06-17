@@ -343,6 +343,7 @@ router.post('/:id/attendance', requireAuth, async (req, res, next) => {
     });
     return res.json({
         userId: req.user.id,
+        //can change pending to undecided for consistency
         status: 'pending'
     })
 });
@@ -390,6 +391,7 @@ router.put('/:id/attendance', [requireAuth, validateAttendance], async (req, res
     }
     let attendance = await Attendance.findOne({
         where: {
+                               //change to req.body.userId
             [Op.and]: [{ userId: req.user.id }, { eventId: event.id }]
         },
         attributes: { include: ['id'] }

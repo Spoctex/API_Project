@@ -104,6 +104,7 @@ router.get('/:id', async (req, res, next) => {
         attributes: ['id', 'url', 'preview']
     });
     let organizer = await group.getUsers({
+        //id should equal group.organizerId
         where: { id: group.id },
         attributes: ['id', 'firstName', 'lastName']
     });
@@ -114,6 +115,7 @@ router.get('/:id', async (req, res, next) => {
     group = group.toJSON();
     group.numMembers = mmbrs;
     group.GroupImages = imgs;
+                    //Result of a find all: index into array to get User object
     group.Organizer = organizer;
     group.Venues = venues;
     return res.json(group)
@@ -194,6 +196,7 @@ router.get('/:id/venues', requireAuth, async (req, res, next) => {
         err.status = 403;
         return next(err);
     }
+    //return array in an object under Values key
     let venues = await group.getVenues();
     return res.json(venues);
 });
@@ -283,6 +286,7 @@ router.get('/:id/events', async (req, res, next) => {
         let invited = await event.getUsers();
         let attending = invited.filter(async (user) => user.Attendance.status === "attending");
         if (previewImage[0]) event.dataValues.previewImage = previewImage[0].url;
+                //change to numAttending
         event.dataValues.attending = attending.length;
     }));
     return res.json({ Events });
@@ -382,6 +386,7 @@ router.post('/:id/events', [requireAuth, validateNewEvent], async (req, res, nex
     return res.json(newEvent);
 });
 
+                                    //pass in next for error handeling
 router.get('/:id/members', async (req, res) => {
     let group = await Group.findByPk(req.params.id);
     if (!group) {
