@@ -105,7 +105,7 @@ router.get('/:id', async (req, res, next) => {
     });
     let organizer = await group.getUsers({
         //id should equal group.organizerId
-        where: { id: group.id },
+        where: { id: group.organizerId },
         attributes: ['id', 'firstName', 'lastName']
     });
     let venues = await group.getVenues({
@@ -116,7 +116,7 @@ router.get('/:id', async (req, res, next) => {
     group.numMembers = mmbrs;
     group.GroupImages = imgs;
                     //Result of a find all: index into array to get User object
-    group.Organizer = organizer;
+    group.Organizer = organizer[0];
     group.Venues = venues;
     return res.json(group)
 });
@@ -196,9 +196,9 @@ router.get('/:id/venues', requireAuth, async (req, res, next) => {
         err.status = 403;
         return next(err);
     }
-    //return array in an object under Values key
-    let venues = await group.getVenues();
-    return res.json(venues);
+    //return array in an object under Venues key
+    let Venues = await group.getVenues();
+    return res.json({Venues});
 });
 
 const validateNewVenue = [
@@ -287,7 +287,7 @@ router.get('/:id/events', async (req, res, next) => {
         let attending = invited.filter(async (user) => user.Attendance.status === "attending");
         if (previewImage[0]) event.dataValues.previewImage = previewImage[0].url;
                 //change to numAttending
-        event.dataValues.attending = attending.length;
+        event.dataValues.numAttending = attending.length;
     }));
     return res.json({ Events });
 });
@@ -387,7 +387,7 @@ router.post('/:id/events', [requireAuth, validateNewEvent], async (req, res, nex
 });
 
                                     //pass in next for error handeling
-router.get('/:id/members', async (req, res) => {
+router.get('/:id/members', async (req, res, next) => {
     let group = await Group.findByPk(req.params.id);
     if (!group) {
         let err = new Error('Group could not be found');

@@ -58,7 +58,7 @@ router.get('/', queryValidation, async (req, res) => {
         let invited = await event.getUsers();
         let attending = invited.filter(async (user) => user.Attendance.status === "attending");
         if (previewImage[0]) event.dataValues.previewImage = previewImage[0].url;
-        event.dataValues.attending = attending.length;
+        event.dataValues.numAttending = attending.length;
     }));
 
 
@@ -90,7 +90,7 @@ router.get('/:id', async (req, res, next) => {
     };
     let invited = await event.getUsers();
     let attending = invited.filter(async (user) => user.Attendance.status === "attending")
-    event.dataValues.attending = attending.length;
+    event.dataValues.numAttending = attending.length;
     if (event.price) {
         let price = event.price.toString().split('.');
         if (price[1].length < 2) {
@@ -344,7 +344,7 @@ router.post('/:id/attendance', requireAuth, async (req, res, next) => {
     return res.json({
         userId: req.user.id,
         //can change pending to undecided for consistency
-        status: 'pending'
+        status: 'undecided'
     })
 });
 
@@ -392,7 +392,7 @@ router.put('/:id/attendance', [requireAuth, validateAttendance], async (req, res
     let attendance = await Attendance.findOne({
         where: {
                                //change to req.body.userId
-            [Op.and]: [{ userId: req.user.id }, { eventId: event.id }]
+            [Op.and]: [{ userId: req.body.userId }, { eventId: event.id }]
         },
         attributes: { include: ['id'] }
     });
