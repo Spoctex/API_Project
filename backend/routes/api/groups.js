@@ -284,7 +284,7 @@ router.get('/:id/events', async (req, res, next) => {
         }
         let previewImage = await event.getEventImages({ where: { preview: true }, attributes: ['url'] });
         let invited = await event.getUsers();
-        let attending = invited.filter(async (user) => user.Attendance.status === "attending");
+        let attending = invited.filter(async (user) => user.Attendance.status === "attending" || user.Attendance.status === "waitlist");
         if (previewImage[0]) event.dataValues.previewImage = previewImage[0].url;
                 //change to numAttending
         event.dataValues.numAttending = attending.length;
@@ -416,7 +416,7 @@ router.get('/:id/members', async (req, res, next) => {
         delete mmbr.Membership["groupId"];
         delete mmbr.Membership.userId;
         acc.push(mmbr);
-        if (!auth && mmbr.Membership.status === 'left') acc.pop();
+        if (!auth && mmbr.Membership.status === 'pending') acc.pop();
         return acc;
     }, []);
     return res.json(members);
@@ -436,7 +436,7 @@ router.post('/:id/membership', requireAuth, async (req, res, next) => {
         let err = new Error('User is already a part of the group');
         err.status = 400;
         for (let i = 0; i < members.length; i++) {
-            if (members[i].Membership.userId === req.user.id && members[i].Membership.status === 'left') {
+            if (members[i].Membership.userId === req.user.id && members[i].Membership.status === 'pending') {
                 err.message = 'Membership has already been requested';
                 break;
             }
@@ -446,7 +446,7 @@ router.post('/:id/membership', requireAuth, async (req, res, next) => {
     let memReq = await Membership.create({
         userId: req.user.id,
         groupId: group.id,
-        status: 'left'
+        status: 'pending'
     });
     return res.json({
         memberId: req.user.id,
