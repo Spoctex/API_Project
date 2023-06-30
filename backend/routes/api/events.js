@@ -56,7 +56,7 @@ router.get('/', queryValidation, async (req, res) => {
         }
         let previewImage = await event.getEventImages({ where: { preview: true }, attributes: ['url'] });
         let invited = await event.getUsers();
-        let attending = invited.filter(async (user) => user.Attendance.status === "attending");
+        let attending = invited.filter(async (user) => user.Attendance.status === "attending" || user.Attendance.status === "waitlist");
         if (previewImage[0]) event.dataValues.previewImage = previewImage[0].url;
         event.dataValues.numAttending = attending.length;
     }));
@@ -89,7 +89,7 @@ router.get('/:id', async (req, res, next) => {
         return next(err);
     };
     let invited = await event.getUsers();
-    let attending = invited.filter(async (user) => user.Attendance.status === "attending")
+    let attending = invited.filter(async (user) => user.Attendance.status === "attending" || user.Attendance.status === "waitlist")
     event.dataValues.numAttending = attending.length;
     if (event.price) {
         let price = event.price.toString().split('.');
@@ -130,7 +130,7 @@ router.post('/:id/images', [requireAuth, validateNewImage], async (req, res, nex
     }, []);
     let invited = await event.getUsers();
     let attending = invited.reduce((acc, user) => {
-        if (user.Attendance.status === "attending") {
+        if (user.Attendance.status === "attending" || user.Attendance.status === "waitlist") {
             acc.push(user.id);
         }
         return acc;
@@ -299,7 +299,7 @@ router.get('/:id/attendees', async (req, res, next) => {
         delete user.Attendance.eventId;
         delete user.Attendance.userId;
         acc.push(user);
-        if (!auth && user.Attendance.status === 'undecided') acc.pop();
+        if (!auth && user.Attendance.status === 'pending') acc.pop();
         return acc;
     }, []);
     return res.json(Attendees);
@@ -333,18 +333,18 @@ router.post('/:id/attendance', requireAuth, async (req, res, next) => {
     if (attendance) {
         let err = new Error('Attendance has already been requested');
         err.status = 400;
-        if (attendance.status !== 'undecided') err.message = 'Attendance has already been decided';
+        if (attendance.status !== 'pending') err.message = 'Attendance has already been decided';
         return next(err);
     }
     await Attendance.create({
         userId: req.user.id,
         eventId: event.id,
-        status: 'undecided'
+        status: 'pending'
     });
     return res.json({
         userId: req.user.id,
         //can change pending to undecided for consistency
-        status: 'undecided'
+        status: 'pending'
     })
 });
 
@@ -360,9 +360,9 @@ const validateAttendance = [
     check('status')
         .exists({ checkFalsy: true })
         .isIn(attendEnums)
-        .withMessage('Please provide at valid status like attending or not attending')
+        .withMessage('Please provide at valid status like attending or waitlist')
         .custom(async (val, { req }) => {
-            if (val === 'pending' || val === 'undecided') throw new Error('Cannot change status to pending')
+            if (val === 'pending') throw new Error('Cannot change status to pending')
         }),
     handleValidationErrors
 ];
