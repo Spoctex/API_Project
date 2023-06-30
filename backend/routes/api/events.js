@@ -34,7 +34,6 @@ router.get('/', queryValidation, async (req, res) => {
     size = Math.round(size)
     pagination.limit = size;
     pagination.offset = (page - 1) * size;
-    console.log(pagination)
     let Events = await Event.findAll({
         include: [{
             model: Group,
@@ -176,7 +175,6 @@ const validateNewEvent = [
         .withMessage('Price must be decimal')
         .custom(async (value, { req }) => {
             value = value.toString().split('.');
-            console.log(Number(value[0]) < 0)
             if (value[1].length > 2 || Number(value[0]) < 0) throw new Error('Please provide a valid price')
         }),
     check('description')

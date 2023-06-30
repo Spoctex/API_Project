@@ -431,7 +431,6 @@ router.post('/:id/membership', requireAuth, async (req, res, next) => {
     }
     let members = await group.getUsers();
     let membersId = members.map(mmbr => mmbr.id);
-    console.log(req.user.id, group.organizerId, membersId)
     if ([group.organizerId, ...membersId].includes(req.user.id)) {
         let err = new Error('User is already a part of the group');
         err.status = 400;
