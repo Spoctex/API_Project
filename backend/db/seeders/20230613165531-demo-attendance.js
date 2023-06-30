@@ -23,7 +23,7 @@ module.exports = {
       {
         eventId:1,
         userId:2,
-        status:'not attending'
+        status:'waitlist'
       },
       {
         eventId:1,
@@ -33,7 +33,7 @@ module.exports = {
       {
         eventId:2,
         userId:2,
-        status:'undecided'
+        status:'pending'
       },
     ], {});
   },

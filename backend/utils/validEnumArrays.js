@@ -1,5 +1,5 @@
-const groupEnums = ['tech','sports','literature'];
-const memberEnums = ['member','co-host','left'];
-const attendEnums = ['attending','not attending','undecided'];
-const eventEnums = ['tech','sports','literature'];
+const groupEnums = ['Online','In person'];
+const memberEnums = ['member','co-host','pending'];
+const attendEnums = ['attending','waitlist','pending'];
+const eventEnums = ['Online','In person'];
 module.exports = {groupEnums,memberEnums,attendEnums,eventEnums}

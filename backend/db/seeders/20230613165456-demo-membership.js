@@ -33,7 +33,7 @@ module.exports = {
       {
         userId:2,
         groupId:2,
-        status:'left'
+        status:'pending'
       }
     ], {});
   },

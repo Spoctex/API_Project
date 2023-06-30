@@ -24,7 +24,7 @@ module.exports = {
         organizerId:1,
         name:'Group1',
         about:'about1',
-        type:'tech',
+        type:'Online',
         private: true,
         city:'city1',
         state:'NH'
@@ -33,7 +33,7 @@ module.exports = {
         organizerId:2,
         name:'Group2',
         about:'about2',
-        type:'sports',
+        type:'In person',
         private: false,
         city:'city2',
         state:'NY'
@@ -41,7 +41,7 @@ module.exports = {
       {
         organizerId:2,
         name:'Group3',
-        type:'literature',
+        type:'In person',
         private: true,
         city:'city3',
         state:'NJ'
