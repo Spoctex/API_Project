@@ -2,7 +2,7 @@ import { NavLink, useHistory } from 'react-router-dom';
 import './index.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { getGroups } from '../../store/groups';
+import { getGroups } from '../../../store/groups';
 
 function GroupList(){
     const history = useHistory();
