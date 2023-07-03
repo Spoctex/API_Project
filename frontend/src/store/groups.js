@@ -35,6 +35,9 @@ export const getGroups = () => async dispatch => {
 export const getGroup = (id) => async dispatch => {
     let group = await csrfFetch(`/api/groups/${id}`);
     group = await group.json();
+    let groupEvents = await csrfFetch(`/api/groups/${id}/events`);
+    groupEvents = await groupEvents.json();
+    group.Events = groupEvents.Events;
     dispatch(loadGroup(group));
     return group;
 }
