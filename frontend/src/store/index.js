@@ -6,7 +6,7 @@ const rootReducer = combineReducers({
     session: sessionReducer
 });
 
-
+//test
 let enhancer;
 
 if (process.env.NODE_ENV === 'production') {
