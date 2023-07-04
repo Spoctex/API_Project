@@ -2,7 +2,7 @@ module.exports = [
     // Event 1
     {
       venueId: 1,
-      groupId: 1,
+      groupId: 11,
       name: 'Outdoor Concert',
       description: 'Enjoy a live outdoor concert with great music!',
       type: 'In person',
@@ -14,7 +14,7 @@ module.exports = [
     // Event 2
     {
       venueId: 2,
-      groupId: 2,
+      groupId: 6,
       name: 'Art Exhibition',
       description: 'Explore a captivating art exhibition featuring various artists.',
       type: 'In person',
@@ -26,7 +26,7 @@ module.exports = [
     // Event 3
     {
       venueId: 3,
-      groupId: 3,
+      groupId: 9,
       name: 'Virtual Conference',
       description: 'Join us for an exciting virtual conference on the latest technologies.',
       type: 'Online',
@@ -38,7 +38,7 @@ module.exports = [
     // Event 4
     {
       venueId: 4,
-      groupId: 4,
+      groupId: 7,
       name: 'Food Festival',
       description: 'Indulge in a variety of delicious food at our annual food festival.',
       type: 'In person',
@@ -50,7 +50,7 @@ module.exports = [
     // Event 5
     {
       venueId: 5,
-      groupId: 5,
+      groupId: 3,
       name: 'Workshop: Photography Basics',
       description: 'Learn the fundamentals of photography in this interactive workshop.',
       type: 'In person',
@@ -74,7 +74,7 @@ module.exports = [
     // Event 7
     {
       venueId: 7,
-      groupId: 7,
+      groupId: 10,
       name: 'Yoga Retreat',
       description: 'Escape to a serene yoga retreat to rejuvenate your mind and body.',
       type: 'In person',
@@ -86,7 +86,7 @@ module.exports = [
     // Event 8
     {
       venueId: 8,
-      groupId: 8,
+      groupId: 11,
       name: 'Online Music Concert',
       description: 'Experience a captivating music concert from the comfort of your home.',
       type: 'Online',
@@ -98,7 +98,7 @@ module.exports = [
     // Event 9
     {
       venueId: 9,
-      groupId: 9,
+      groupId: 8,
       name: 'Outdoor Movie Night',
       description: 'Enjoy a movie under the stars with friends and family.',
       type: 'In person',
@@ -110,7 +110,7 @@ module.exports = [
     // Event 10
     {
       venueId: 10,
-      groupId: 10,
+      groupId: 6,
       name: 'Art Workshop: Watercolor Painting',
       description: 'Learn the art of watercolor painting in this hands-on workshop.',
       type: 'In person',
@@ -134,7 +134,7 @@ module.exports = [
     // Event 12
     {
       venueId: 12,
-      groupId: 2,
+      groupId: 9,
       name: 'Online Webinar: Financial Planning',
       description: 'Gain valuable insights into financial planning in this informative webinar.',
       type: 'Online',
@@ -146,7 +146,7 @@ module.exports = [
     // Event 13
     {
       venueId: 13,
-      groupId: 3,
+      groupId: 5,
       name: 'Gaming Tournament',
       description: 'Compete against other gamers in an exciting gaming tournament.',
       type: 'In person',
@@ -158,7 +158,7 @@ module.exports = [
     // Event 14
     {
       venueId: 14,
-      groupId: 4,
+      groupId: 7,
       name: 'Cooking Class: Italian Cuisine',
       description: 'Learn to prepare authentic Italian dishes in this interactive cooking class.',
       type: 'In person',
@@ -170,7 +170,7 @@ module.exports = [
     // Event 15
     {
       venueId: 15,
-      groupId: 5,
+      groupId: 2,
       name: 'Virtual Book Club',
       description: 'Join our virtual book club to discuss the latest bestsellers.',
       type: 'Online',

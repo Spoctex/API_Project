@@ -18,7 +18,7 @@ function GroupDetails() {
                     {'<'} <NavLink to='/groups'>Groups</NavLink>
                 </span>
                 <div>
-                    {/* <img src={group.GroupImages?.find(img => img.preview)?.url} /> */}
+                    <img src={group.GroupImages?.find(img => img.preview)?.url} />
                     <div>
                         <h3>{group.name}</h3>
                         <h4>{`${group.city}, ${group.state}`}</h4>
@@ -38,7 +38,7 @@ function GroupDetails() {
                     return (
                         <div>
                             <div>
-                                {/* <img src={event.previewImage} /> */}
+                                <img src={event.previewImage} />
                                 <div>
                                     <h4>{`${event.startDate.slice(0,10)} * ${event.startDate.slice(11,18)}`}</h4>
                                     <h4>{event.name}</h4>

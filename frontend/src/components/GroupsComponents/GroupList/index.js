@@ -23,7 +23,7 @@ function GroupList(){
                 {groups.map(group=>{
                     return(
                         <div onClick={()=>history.push(`/groups/${group.id}`)}>
-                            {/* <img src={group.previewImage}/> */}
+                            <img src={group.previewImage}/>
                             <div>
                                 <h3>{group.name}</h3>
                                 <h4>{`${group.city}, ${group.name}`}</h4>
