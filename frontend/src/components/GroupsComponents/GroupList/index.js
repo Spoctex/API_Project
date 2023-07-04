@@ -9,7 +9,6 @@ function GroupList(){
     const dispatch = useDispatch();
     const groups = useSelector(state=>Object.values(state.groups.allGroups))
     useEffect(()=>{dispatch(getGroups())},[])
-    console.log('allGroups state',groups);
 
     return (
         <div>

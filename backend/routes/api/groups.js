@@ -103,9 +103,8 @@ router.get('/:id', async (req, res, next) => {
     let imgs = await group.getGroupImages({
         attributes: ['id', 'url', 'preview']
     });
-    let organizer = await group.getUsers({
+    let organizer = await User.findByPk(group.organizerId,{
         //id should equal group.organizerId
-        where: { id: group.organizerId },
         attributes: ['id', 'firstName', 'lastName']
     });
     let venues = await group.getVenues({
@@ -116,7 +115,7 @@ router.get('/:id', async (req, res, next) => {
     group.numMembers = mmbrs;
     group.GroupImages = imgs;
                     //Result of a find all: index into array to get User object
-    group.Organizer = organizer[0];
+    group.Organizer = organizer;
     group.Venues = venues;
     return res.json(group)
 });
@@ -277,9 +276,9 @@ router.get('/:id/events', async (req, res, next) => {
     await Promise.all(Events.map(async (event) => {
         if (event.price) {
             let price = event.price.toString().split('.');
-            if (price[1].length < 2) {
+            if (price[1]&&price[1].length < 2) {
                 while (price[1].length < 2) price[1] += '0';
-            }
+            }else price.push('00');
             event.price = price.join('.');
         }
         let previewImage = await event.getEventImages({ where: { preview: true }, attributes: ['url'] });
