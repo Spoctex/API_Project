@@ -1,16 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux';
 import './index.css';
-import { NavLink, useParams, useHistory } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getGroup } from '../../../store/groups';
 
 
 function GroupDetails() {
     const dispatch = useDispatch();
-    const history = useHistory();
     const { groupId } = useParams();
     const group = useSelector(state => state.groups.singleGroup);
-    useEffect(() => dispatch(getGroup(groupId)), [dispatch, groupId]);
+    useEffect(() => {dispatch(getGroup(groupId))}, [dispatch, groupId]);
+
     return (
         <>
             <div>
@@ -18,7 +18,7 @@ function GroupDetails() {
                     {'<'} <NavLink to='/groups'>Groups</NavLink>
                 </span>
                 <div>
-                    <img src={group.GroupImages?.find(img => img.preview).url} />
+                    {/* <img src={group.GroupImages?.find(img => img.preview)?.url} /> */}
                     <div>
                         <h3>{group.name}</h3>
                         <h4>{`${group.city}, ${group.state}`}</h4>
@@ -38,7 +38,7 @@ function GroupDetails() {
                     return (
                         <div>
                             <div>
-                                <img src={event.previewImage} />
+                                {/* <img src={event.previewImage} /> */}
                                 <div>
                                     <h4>{`${event.startDate.slice(0,10)} * ${event.startDate.slice(11,18)}`}</h4>
                                     <h4>{event.name}</h4>

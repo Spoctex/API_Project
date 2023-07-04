@@ -9,7 +9,8 @@ function GroupList(){
     const dispatch = useDispatch();
     const groups = useSelector(state=>Object.values(state.groups.allGroups))
     useEffect(()=>{dispatch(getGroups())},[])
-    console.log(groups)
+    console.log('allGroups state',groups);
+
     return (
         <div>
             <div>
@@ -23,7 +24,7 @@ function GroupList(){
                 {groups.map(group=>{
                     return(
                         <div onClick={()=>history.push(`/groups/${group.id}`)}>
-                            <img src={group.previewImage}/>
+                            {/* <img src={group.previewImage}/> */}
                             <div>
                                 <h3>{group.name}</h3>
                                 <h4>{`${group.city}, ${group.name}`}</h4>
