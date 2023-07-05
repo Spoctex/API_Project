@@ -9,7 +9,7 @@ function GetStarted() {
             <NavLink to='/events'>
                 Find an event
             </NavLink>
-            <NavLink to='/groups'>
+            <NavLink to='/groups/new'>
                 Start a new group
             </NavLink>
         </>
