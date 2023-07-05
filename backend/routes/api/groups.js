@@ -276,8 +276,10 @@ router.get('/:id/events', async (req, res, next) => {
     await Promise.all(Events.map(async (event) => {
         if (event.price) {
             let price = event.price.toString().split('.');
-            if (price[1]&&price[1].length < 2) {
-                while (price[1].length < 2) price[1] += '0';
+            if(price[1]){
+                if (price[1].length < 2) {
+                    while (price[1].length < 2) price[1] += '0';
+                }
             }else price.push('00');
             event.price = price.join('.');
         }

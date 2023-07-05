@@ -26,7 +26,7 @@ function GroupList(){
                             <img src={group.previewImage}/>
                             <div>
                                 <h3>{group.name}</h3>
-                                <h4>{`${group.city}, ${group.name}`}</h4>
+                                <h4>{`${group.city}, ${group.state}`}</h4>
                                 <text>{group.about}</text>
                                 <h4>{`${group.numMembers} Members * ${group.private? 'Private':'Public'}`}</h4>
                             </div>

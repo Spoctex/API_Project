@@ -48,9 +48,11 @@ router.get('/', queryValidation, async (req, res) => {
     await Promise.all(Events.map(async (event) => {
         if (event.price) {
             let price = event.price.toString().split('.');
-            if (price[1].length < 2) {
-                while (price[1].length < 2) price[1] += '0';
-            }
+            if(price[1]){
+                if (price[1].length < 2) {
+                    while (price[1].length < 2) price[1] += '0';
+                }
+            }else price.push('00');
             event.price = price.join('.');
         }
         let previewImage = await event.getEventImages({ where: { preview: true }, attributes: ['url'] });
@@ -92,9 +94,11 @@ router.get('/:id', async (req, res, next) => {
     event.dataValues.numAttending = attending.length;
     if (event.price) {
         let price = event.price.toString().split('.');
-        if (price[1].length < 2) {
-            while (price[1].length < 2) price[1] += '0';
-        }
+        if(price[1]){
+            if (price[1].length < 2) {
+                while (price[1].length < 2) price[1] += '0';
+            }
+        }else price.push('00');
         event.price = price.join('.');
     }
     return res.json(event);

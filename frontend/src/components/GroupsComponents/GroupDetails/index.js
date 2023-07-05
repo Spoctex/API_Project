@@ -40,7 +40,7 @@ function GroupDetails() {
                             <div>
                                 <img src={event.previewImage} />
                                 <div>
-                                    <h4>{`${event.startDate.slice(0,10)} * ${event.startDate.slice(11,18)}`}</h4>
+                                    <h4>{`${event.startDate.slice(0,10)} * ${event.startDate.slice(11,19)}`}</h4>
                                     <h4>{event.name}</h4>
                                     <span>{`${event.Venue.city}, ${event.Venue.state}`}</span>
                                 </div>
