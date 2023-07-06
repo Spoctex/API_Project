@@ -3,6 +3,8 @@ import './index.css';
 import { NavLink, useParams, useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getGroup } from '../../../store/groups';
+import OpenModalButton from '../../OpenModalButton';
+import DeleteModal from '../../DeleteModal';
 
 
 function GroupDetails() {
@@ -28,7 +30,7 @@ function GroupDetails() {
                         <button>Join this group</button>
                         <button>Create Event</button>
                         <button onClick={()=>history.push(`/groups/${groupId}/edit`)}>Update</button>
-                        <button>Delete</button>
+                        <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{type:'Group',id:groupId}}/>} />
                     </div>
                 </div>
             </div>

@@ -72,6 +72,14 @@ export const updateGroup = (group, id) => async dispatch =>{
     return reGroup;
 }
 
+export const deleteGroup = (id) => async dispatch =>{
+    let res = await csrfFetch(`/api/groups/${id}`,{
+        method: 'DELETE'
+    });
+    dispatch(loadGroup({}))
+    return
+}
+
 //REDUCER & INITAL STATE===========================================================================================
 
 const initialState = {
