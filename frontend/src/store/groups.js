@@ -43,22 +43,33 @@ export const getGroup = (id) => async dispatch => {
     return group;
 }
 
-export const createGroup=(group,image)=> async dispatch =>{
-    let newGroup = await csrfFetch(`/api/groups/`,{
-        method:'POST',
+export const createGroup = (group, image) => async dispatch => {
+    let newGroup = await csrfFetch(`/api/groups/`, {
+        method: 'POST',
         body: JSON.stringify(group)
     });
     newGroup = await newGroup.json();
-    let newImage = await csrfFetch(`/api/groups/${newGroup.id}/images`,{
+    let newImage = await csrfFetch(`/api/groups/${newGroup.id}/images`, {
         method: 'POST',
         body: JSON.stringify({
-            preview:true,
-            url:image
+            preview: true,
+            url: image
         })
     });
-    newGroup.GroupImages =[newImage];
+    newImage = await newImage.json();
+    newGroup.GroupImages = [newImage];
     dispatch(loadGroup(newGroup));
     return newGroup;
+}
+
+export const updateGroup = (group, id) => async dispatch =>{
+    let reGroup = await csrfFetch(`/api/groups/${id}`,{
+        method: 'PUT',
+        body:JSON.stringify(group)
+    });
+    reGroup=reGroup.json();
+    dispatch(loadGroup(reGroup));
+    return reGroup;
 }
 
 //REDUCER & INITAL STATE===========================================================================================
