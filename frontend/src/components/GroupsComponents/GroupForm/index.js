@@ -60,7 +60,8 @@ function GroupForm({ groupInfo }) {
             const newGroup = await dispatch(createGroup(group, image));
             history.push(`/groups/${newGroup.id}`);
         } else {
-            const reGroup = await dispatch(updateGroup(group, groupInfo.id));
+            console.log()
+            const reGroup = await dispatch(updateGroup(group, groupId));
             history.push(`/groups/${reGroup.id}`);
         }
     }
