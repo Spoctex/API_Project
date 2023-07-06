@@ -1,7 +1,8 @@
 import { csrfFetch } from "./csrf";
 
 const LOAD_GROUPS = 'groups/loadAll';
-const LOAD_GROUP = 'groups/loadOne'
+const LOAD_GROUP = 'groups/loadOne';
+const POST_GROUP = 'groups/post';
 
 //ACTIONS===========================================================================================
 
@@ -40,6 +41,24 @@ export const getGroup = (id) => async dispatch => {
     group.Events = groupEvents.Events;
     dispatch(loadGroup(group));
     return group;
+}
+
+export const createGroup=(group,image)=> async dispatch =>{
+    let newGroup = await csrfFetch(`/api/groups/`,{
+        method:'POST',
+        body: JSON.stringify(group)
+    });
+    newGroup = await newGroup.json();
+    let newImage = await csrfFetch(`/api/groups/${newGroup.id}/images`,{
+        method: 'POST',
+        body: JSON.stringify({
+            preview:true,
+            url:image
+        })
+    });
+    newGroup.GroupImages =[newImage];
+    dispatch(loadGroup(newGroup));
+    return newGroup;
 }
 
 //REDUCER & INITAL STATE===========================================================================================
