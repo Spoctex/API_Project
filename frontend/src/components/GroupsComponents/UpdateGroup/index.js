@@ -3,8 +3,7 @@ import GroupForm from '../GroupForm';
 import './index.css';
 
 function EditGroup (){
-    const groupInfo = useSelector(state=>state.groups.singleGroup);
-    groupInfo.new=false;
+    const groupInfo={new:false}
     return(
         <GroupForm groupInfo={groupInfo}/>
     )

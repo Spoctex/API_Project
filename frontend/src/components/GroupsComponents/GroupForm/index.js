@@ -2,24 +2,26 @@ import { useState } from 'react';
 import './index.css';
 import validStates from './validStates';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { createGroup, updateGroup } from '../../../store/groups';
+import { useHistory, useParams } from 'react-router-dom';
+import { createGroup, getGroup, updateGroup } from '../../../store/groups';
+import { useEffect } from 'react';
 
 function GroupForm({ groupInfo }) {
     const dispatch = useDispatch();
     const history = useHistory();
-    const [state, setState] = useState(groupInfo.state || '');
-    const [groupType, setGroupType] = useState(groupInfo.type || '');
-    const [groupPrivate, setGroupPrivate] = useState(groupInfo.name ? groupInfo.private ? 'Private' : 'Public' : '');
-    const [name, setName] = useState(groupInfo.name || '');
-    const [about, setAbout] = useState(groupInfo.about || '');
-    const [city, setCity] = useState(groupInfo.city || '');
-    const [image, setImage] = useState(groupInfo.GroupImages?.find(img => img.preview)?.url || '');
+    const [state, setState] = useState('');
+    const [groupType, setGroupType] = useState('');
+    const [groupPrivate, setGroupPrivate] = useState('');
+    const [name, setName] = useState('');
+    const [about, setAbout] = useState('');
+    const [city, setCity] = useState('');
+    const [image, setImage] = useState('');
     const [errors, setErrors] = useState({});
     const [submitted, setSubmitted] = useState(false);
     const organizer = useSelector(state => state.session.user);
     let organizerId;
     if (organizer) organizerId = organizer.id;
+    const { groupId } = useParams();
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -63,7 +65,18 @@ function GroupForm({ groupInfo }) {
         }
     }
 
-
+    useEffect(() => {
+        async function once() {
+            let group = await dispatch(getGroup(groupId));
+            setState(group.state);
+            setCity(group.city);
+            setAbout(group.about);
+            setGroupType(group.type);
+            setGroupPrivate(group.private ? 'Private' : 'Public');
+            setName(group.name);
+        }
+        if (!groupInfo.new) once();
+    }, [])
 
     return (
         <form onSubmit={onSubmit}>
