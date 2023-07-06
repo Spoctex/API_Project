@@ -28,7 +28,7 @@ function GroupDetails() {
                         <h4>{`${group.numMembers} members * ${group.private ? 'Private' : 'Public'}`}</h4>
                         <h4>{`Organized by ${group.Organizer?.firstName} ${group.Organizer?.lastName}`}</h4>
                         <button>Join this group</button>
-                        <button>Create Event</button>
+                        <button onClick={()=>history.push(`/groups/${groupId}/events/new`)}>Create Event</button>
                         <button onClick={()=>history.push(`/groups/${groupId}/edit`)}>Update</button>
                         <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{type:'Group',id:groupId}}/>} />
                     </div>
