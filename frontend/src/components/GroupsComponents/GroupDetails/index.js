@@ -12,24 +12,69 @@ function GroupDetails() {
     const history = useHistory();
     const { groupId } = useParams();
     const group = useSelector(state => state.groups.singleGroup);
-    const user = useSelector(state=>state.session.user);
+    const user = useSelector(state => state.session.user);
     useEffect(() => { dispatch(getGroup(groupId)) }, [dispatch, groupId]);
 
     let groupButtons;
     console.log(user, group)
-    if(user?.id===group?.organizerId){
+    if (user?.id === group?.organizerId) {
         groupButtons = (
             <>
-            <button onClick={()=>history.push(`/groups/${groupId}/events/new`)}>Create Event</button>
-            <button onClick={()=>history.push(`/groups/${groupId}/edit`)}>Update</button>
-            <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{type:'Group',groupId:groupId}}/>} />
+                <button onClick={() => history.push(`/groups/${groupId}/events/new`)}>Create Event</button>
+                <button onClick={() => history.push(`/groups/${groupId}/edit`)}>Update</button>
+                <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{ type: 'Group', groupId: groupId }} />} />
             </>
         )
-    } else{
-        groupButtons =(
+    } else {
+        groupButtons = (
             <button>Join This Group</button>
         )
     }
+
+
+    let eventCards;
+    if (group.Events?.length) {
+        let now = new Date();
+        now = now.getTime();
+        let upcoming = group.Events?.filter(event => {
+            let start = new Date(event.startDate);
+            start = start.getTime();
+            return start > now;
+        })
+        let past = group.Events?.filter(event => {
+            let start = new Date(event.startDate);
+            start = start.getTime();
+            return start <= now;
+        })
+        console.log('upcoming', upcoming, 'past', past)
+
+
+
+        function eventCardCreate(eventArr){
+            return eventArr.map(event => {
+                return (
+                    <div onClick={() => history.push(`/events/${event.id}`)}>
+                        <div>
+                            <img src={event.previewImage} />
+                            <div>
+                                <h4>{`${event.startDate.slice(0, 10)} * ${event.startDate.slice(11, 19)}`}</h4>
+                                <h4>{event.name}</h4>
+                                <span>{`${event.Venue.city}, ${event.Venue.state}`}</span>
+                            </div>
+                        </div>
+                        <span>{event.description}</span>
+                    </div>
+                );
+            })
+        }
+
+        eventCards = (<>
+            {upcoming.length && <h3>Upcoming Events</h3>}
+            {upcoming.length && eventCardCreate(upcoming)}
+            {past.length && <h3>Past Events</h3>}
+            {past.length && eventCardCreate(past)}
+        </>)
+    } else eventCards = (<h3>No Upcoming Events</h3>)
 
 
     return (
@@ -54,7 +99,8 @@ function GroupDetails() {
                 <h4>{`${group.Organizer?.firstName} ${group.Organizer?.lastName}`}</h4>
                 <h3>What we're about</h3>
                 <span>{group.about}</span>
-                <h3>Events</h3>
+                {eventCards}
+                {/* <h3>Events</h3>
                 {group.Events?.map(event => {
                     return (
                         <div onClick={()=>history.push(`/events/${event.id}`)}>
@@ -69,7 +115,7 @@ function GroupDetails() {
                             <span>{event.description}</span>
                         </div>
                     );
-                })}
+                })} */}
             </div>
         </>
     );
