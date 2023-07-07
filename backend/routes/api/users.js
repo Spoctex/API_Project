@@ -13,6 +13,11 @@ const validateSignup = [
         .exists({ checkFalsy: true })
         .isEmail()
         .withMessage('Please provide a valid email.'),
+    check('email')
+        .custom(async (value, { req }) => {
+            let search = await User.findOne({ where: { email: value } });
+            if (search) throw new Error('Email already in use');
+        }),
     check('username')
         .exists({ checkFalsy: true })
         .isLength({ min: 4 })
@@ -21,6 +26,11 @@ const validateSignup = [
         .not()
         .isEmail()
         .withMessage('Username cannot be an email.'),
+    check('username')
+        .custom(async (value, { req }) => {
+            let search = await User.findOne({ where: { username: value } });
+            if (search) throw new Error('Username already in use');
+        }),
     check('password')
         .exists({ checkFalsy: true })
         .isLength({ min: 6 })
@@ -42,12 +52,12 @@ router.post(
     validateSignup,
     async (req, res, next) => {
         const { email, password, username, firstName, lastName } = req.body;
-        let search = await User.findOne({ where: { email } });
-        if (search) {
-            let err = new Error('Email already in use');
-            err.status = 500;
-            return next(err);
-        }
+        // let search = await User.findOne({ where: { email } });
+        // if (search) {
+        //     let err = new Error('Email already in use');
+        //     err.status = 500;
+        //     return next(err);
+        // }
         const hashedPassword = bcrypt.hashSync(password);
         const user = await User.create({ firstName, lastName, email, username, hashedPassword });
 
