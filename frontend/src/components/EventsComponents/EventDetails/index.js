@@ -14,7 +14,6 @@ function EventDetails() {
     const { eventId } = useParams();
     const event = useSelector(state => state.events.singleEvent);
     useEffect(() => { dispatch(getEvent(eventId)) }, [dispatch, eventId]);
-    console.log('EventDetails', event)
 
     return (
         <>

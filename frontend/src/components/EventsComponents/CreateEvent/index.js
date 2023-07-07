@@ -25,7 +25,6 @@ function CreateEvent() {
     useEffect(() => {
         async function once() {
             let groupLoad = await dispatch(getGroup(groupId));
-            console.log(groupLoad)
             setGroup(groupLoad);
         }
         once();

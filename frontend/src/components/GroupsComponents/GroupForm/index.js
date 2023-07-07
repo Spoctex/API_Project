@@ -55,12 +55,10 @@ function GroupForm({ groupInfo }) {
             type: groupType,
             private: groupPrivate === 'Private' ? 'true' : 'false'
         };
-        console.log(group.private)
         if (groupInfo.new) {
             const newGroup = await dispatch(createGroup(group, image));
             history.push(`/groups/${newGroup.id}`);
         } else {
-            console.log()
             const reGroup = await dispatch(updateGroup(group, groupId));
             history.push(`/groups/${reGroup.id}`);
         }

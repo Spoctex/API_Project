@@ -14,12 +14,10 @@ function DeleteModal({ deleteContext }) {
     const handleDelete = () => {
         switch (deleteContext.type) {
             case 'Group':
-                console.log('Group Case working')
                 return dispatch(deleteGroup(deleteContext.groupId))
                 .then(()=>{history.push('/groups/')})
                 .then(closeModal);
             case 'Event':
-                console.log('Event Case working')
                 return dispatch(deleteEvent(deleteContext.eventId))
                 .then(()=>{history.push(`/groups/${deleteContext.groupId}`)})
                 .then(closeModal);
