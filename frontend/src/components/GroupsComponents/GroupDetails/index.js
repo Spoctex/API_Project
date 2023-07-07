@@ -42,7 +42,7 @@ function GroupDetails() {
                 <h3>Events</h3>
                 {group.Events?.map(event => {
                     return (
-                        <div>
+                        <div onClick={()=>history.push(`/events/${event.id}`)}>
                             <div>
                                 <img src={event.previewImage} />
                                 <div>

@@ -5,10 +5,12 @@ import { useEffect } from 'react';
 import { getEvent } from '../../../store/events';
 import DeleteModal from '../../DeleteModal';
 import OpenModalButton from '../../OpenModalButton';
+import { useHistory } from 'react-router-dom';
 
 
 function EventDetails() {
     const dispatch = useDispatch();
+    const history = useHistory();
     const { eventId } = useParams();
     const event = useSelector(state => state.events.singleEvent);
     useEffect(() => { dispatch(getEvent(eventId)) }, [dispatch, eventId]);
@@ -27,7 +29,7 @@ function EventDetails() {
                 <div>
                     <img src={event.EventImages?.find(img => img.preview)?.url} />
                     <div>
-                        <div>
+                        <div onClick={()=>history.push(`/groups/${event.Group?.id}`)}>
                             <img src={event.Group?.previewImage} />
                             <div>
                                 <h4>{event.Group?.name}</h4>
