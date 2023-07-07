@@ -13,12 +13,20 @@ function Navigation({ isLoaded }) {
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <li>
-        <ProfileButton user={sessionUser} />
-      </li>
+      <>
+        <NavLink to='/groups/new'>
+          Start a new group
+        </NavLink>
+        <ul>
+        <li>
+          <ProfileButton user={sessionUser} />
+        </li>
+        </ul>
+      </>
     );
   } else {
     sessionLinks = (
+      <ul>
       <li>
         <OpenModalButton
           buttonText="Log In"
@@ -29,18 +37,17 @@ function Navigation({ isLoaded }) {
           modalComponent={<SignupFormModal />}
         />
       </li>
+      </ul>
     );
   }
 
   return (
-    <ul>
-      <li>
+    <>
         <NavLink exact to="/">
           Home
         </NavLink>
-      </li>
       {isLoaded && sessionLinks}
-    </ul>
+    </>
   );
 }
 

@@ -1,8 +1,12 @@
 import Intro from './Intro';
 import GetStarted from './GetStarted';
 import './index.css'
+import { useSelector } from 'react-redux';
+import OpenModalButton from '../OpenModalButton';
+import SignupFormModal from '../SignupFormModal';
 
 function Landing() {
+    const user = useSelector(state => state.session.user);
     return (
         <div>
             <Intro />
@@ -15,11 +19,12 @@ function Landing() {
                 </text>
             </div>
             <div>
-                <GetStarted />
+                <GetStarted user={user} />
             </div>
-            <button>
-                Join Meetup
-            </button>
+            {!user && <OpenModalButton
+                buttonText="Join Converge"
+                modalComponent={<SignupFormModal />}
+            />}
         </div>
     )
 }
