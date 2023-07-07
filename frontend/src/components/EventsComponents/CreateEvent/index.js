@@ -1,11 +1,160 @@
+import { useEffect, useState } from 'react';
 import './index.css';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom/cjs/react-router-dom';
+import { getGroup } from '../../../store/groups';
 
-function CreateEvent(){
+function CreateEvent() {
+    const { groupId } = useParams();
+    const dispatch = useDispatch();
+    const [group, setGroup] = useState({});
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [image, setImage] = useState('');
+    const [eventType, setEventType] = useState('');
+    const [eventPrivate, setEventPrivate] = useState('');
+    const [price, setPrice] = useState();
+    const [start, setStart] = useState('');
+    const [end, setEnd] = useState('');
+    const [errors, setErrors] = useState({});
+    const [submitted, setSubmitted] = useState(false);
+
+
+    useEffect(() => {
+        async function once() {
+            let groupLoad = await dispatch(getGroup(groupId));
+            console.log(groupLoad)
+            setGroup(groupLoad);
+        }
+        once();
+    }, [])
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        setSubmitted(true);
+        let errs = {};
+        if (eventType === '') errs.eventType = 'You must pick a type';
+        if (eventPrivate === '') errs.eventPrivate = 'Visibility type is required';
+        if (name === '') errs.name = 'You must give your event a name';
+
+
+        if (price){
+            let price1 = price.split('.');
+            if ((price1[1]&&(isNaN(price1[1])||price1[1].length > 2)) || Number(price1[0]) < 0 || isNaN(price1[0])) errs.price = 'Please provide a valid price';
+        } else errs.price = 'Please provide a valid price';
+
+
+        if (name.length > 30) errs.name = `Your event's name can't exceed 30 characters in length`;
+        if (description === '') errs.description = 'Please tell us about your event: Description must be at least 50 characters in length';
+        if (description.length < 50) errs.description = 'Please be more descriptive about your event: Description must be at least 50 characters in length';
+
+
+        let start1;
+        let startCont = true;
+        try {
+            start1 = new Date(start);
+        } catch {
+            errs.start = 'Please provide a valid date';
+            startCont = false;
+        }
+        let start2;
+        if (startCont) {
+            start2 = start1.getTime();
+            let now = new Date();
+            now = now.getTime();
+            if (!(start2 > now)) {
+                errs.start = 'Start date must be in the future';
+                startCont = false;
+            }
+        }
+
+
+        let end1;
+        let endCont = true;
+        try {
+            end1 = new Date(end);
+        } catch {
+            errs.end = 'Please provide a valid end date';
+            endCont = false;
+        }
+        let end2;
+        if (startCont && endCont) {
+            end2 = end1.getTime();
+            if (!(end2 > start2)) errs.end = 'End date must be after the start date';
+        }
+
+
+        if (image === '') errs.image = 'You must provide an image';
+        else {
+            let invalidImage = true;
+            ['.png', '.jpg', '.jpeg'].forEach(end => { if (image.endsWith(end)) invalidImage = false });
+            if (invalidImage) errs.image = 'Image URL must end with .png, .jpg, or .jpeg';
+        }
+        if (Object.values(errs).length) return setErrors(errs);
+
+
+        let event = {
+            venueId: 2,
+            name,
+            type: eventType,
+            capacity: 10,
+            price,
+            description,
+            startDate: start,
+            endDate: end
+        };
+        console.log('event submit', event, image)
+        // const newEvent = await dispatch(create(event, image));
+        // history.push(`/events/${newEvent.id}`);
+    }
 
     return (
-        <>
-        <div>Create Event</div>
-        </>
+        <form onSubmit={onSubmit}>
+            <h2>{`Create an event for ${group.name}`}</h2>
+            <div>
+                <p>What is the name of your event?</p>
+                <input placeholder='Event Name' value={name} onChange={(e) => setName(e.target.value)} />
+                {submitted && errors.name && <p>{errors.name}</p>}
+            </div>
+            <div>
+                <p>Is this an in person or online event?</p>
+                <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
+                    <option value='' disabled>{'(Select one)'}</option>
+                    <option>In person</option>
+                    <option>Online</option>
+                </select>
+                {submitted && errors.eventType && <p>{errors.eventType}</p>}
+                <p>Is this event private or public?</p>
+                <select value={eventPrivate} onChange={(e) => setEventPrivate(e.target.value)}>
+                    <option value='' disabled>{'(Select one)'}</option>
+                    <option>Private</option>
+                    <option>Public</option>
+                </select>
+                {submitted && errors.eventPrivate && <p>{errors.eventPrivate}</p>}
+                <p>What is the price for your event?</p>
+                <label>$<input placeholder='0.00' value={price} onChange={(e)=>setPrice(e.target.value)}/></label>
+                {submitted && errors.price && <p>{errors.price}</p>}
+            </div>
+            <div>
+                <p>When does your event start?</p>
+                <input type='datetime-local' value={start} onChange={(e) => setStart(e.target.value)} />
+                {submitted && errors.start && <p>{errors.start}</p>}
+                <p>When does your event end?</p>
+                <input type='datetime-local' value={end} onChange={(e) => setEnd(e.target.value)} />
+                {submitted && errors.end && <p>{errors.end}</p>}
+            </div>
+            <div>
+                <p>Please add an image url for your event below:</p>
+                <input placeholder='Image Url' value={image} onChange={(e) => setImage(e.target.value)} />
+                {submitted && errors.image && <p>{errors.image}</p>}
+            </div>
+            <div>
+                <p>Please describe you event:</p>
+                <textarea placeholder='Please write at least 50 characters' value={description} onChange={(e) => setDescription(e.target.value)} />
+                {submitted && errors.description && <p>{errors.description}</p>}
+            </div>
+            <button type='submit'>Create Event</button>
+        </form>
     )
 }
 
