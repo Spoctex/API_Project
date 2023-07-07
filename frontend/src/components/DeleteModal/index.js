@@ -3,6 +3,7 @@ import { useModal } from '../../context/Modal';
 import './index.css';
 import { useDispatch } from 'react-redux';
 import { deleteGroup } from '../../store/groups';
+import { deleteEvent } from '../../store/events';
 
 function DeleteModal({ deleteContext }) {
     const { closeModal } = useModal();
@@ -14,13 +15,14 @@ function DeleteModal({ deleteContext }) {
         switch (deleteContext.type) {
             case 'Group':
                 console.log('Group Case working')
-                return dispatch(deleteGroup(deleteContext.id))
+                return dispatch(deleteGroup(deleteContext.groupId))
                 .then(()=>{history.push('/groups/')})
                 .then(closeModal);
             case 'Event':
-
-                break;
-
+                console.log('Event Case working')
+                return dispatch(deleteEvent(deleteContext.eventId))
+                .then(()=>{history.push(`/groups/${deleteContext.groupId}`)})
+                .then(closeModal);
             default:
                 closeModal();
                 break;

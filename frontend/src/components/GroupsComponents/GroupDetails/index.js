@@ -30,7 +30,7 @@ function GroupDetails() {
                         <button>Join this group</button>
                         <button onClick={()=>history.push(`/groups/${groupId}/events/new`)}>Create Event</button>
                         <button onClick={()=>history.push(`/groups/${groupId}/edit`)}>Update</button>
-                        <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{type:'Group',id:groupId}}/>} />
+                        <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{type:'Group',groupId:groupId}}/>} />
                     </div>
                 </div>
             </div>

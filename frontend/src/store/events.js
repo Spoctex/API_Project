@@ -62,6 +62,14 @@ export const createEvent = (event, image) => async dispatch => {
     return newEvent;
 }
 
+export const deleteEvent = (id) => async dispatch =>{
+    let res = await csrfFetch(`/api/events/${id}`,{
+        method: 'DELETE'
+    });
+    dispatch(loadEvent({}))
+    return
+}
+
 //REDUCER & INITAL STATE===========================================================================================
 
 const initialState = { allEvents: {}, singleEvent: {} }

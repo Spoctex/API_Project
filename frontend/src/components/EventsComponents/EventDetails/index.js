@@ -3,6 +3,8 @@ import './index.css';
 import { NavLink, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getEvent } from '../../../store/events';
+import DeleteModal from '../../DeleteModal';
+import OpenModalButton from '../../OpenModalButton';
 
 
 function EventDetails() {
@@ -35,8 +37,11 @@ function EventDetails() {
                         <div>
                             <div>{`${event.startDate?.slice(0, 10)} * ${event.startDate?.slice(11, 19)}`}</div>
                             <div>{`${event.endDate?.slice(0, 10)} * ${event.endDate?.slice(11, 19)}`}</div>
-                            <div>{event.price?`$${event.price}`:'Free'}</div>
-                            <div>{event.type}</div>
+                            <div>{event.price ? `$${event.price}` : 'Free'}</div>
+                            <div>
+                                <div>{event.type}</div>
+                                <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{ type: 'Event', eventId: eventId, groupId:event.Group?.id }} />} />
+                            </div>
                         </div>
                     </div>
                 </div>
