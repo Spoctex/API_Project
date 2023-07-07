@@ -43,6 +43,25 @@ export const getEvent = (id) => async dispatch => {
     return event;
 }
 
+export const createEvent = (event, image) => async dispatch => {
+    let newEvent = await csrfFetch(`/api/groups/${event.groupId}/events`, {
+        method: 'POST',
+        body: JSON.stringify(event)
+    });
+    newEvent = await newEvent.json();
+    let newImage = await csrfFetch(`/api/events/${newEvent.id}/images`, {
+        method: 'POST',
+        body: JSON.stringify({
+            preview: true,
+            url: image
+        })
+    });
+    newEvent = await csrfFetch(`/api/events/${newEvent.id}`)
+    newEvent = await newEvent.json();
+    dispatch(loadEvent(newEvent));
+    return newEvent;
+}
+
 //REDUCER & INITAL STATE===========================================================================================
 
 const initialState = { allEvents: {}, singleEvent: {} }

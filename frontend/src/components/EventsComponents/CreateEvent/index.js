@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import './index.css';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom/cjs/react-router-dom';
+import { useHistory, useParams } from 'react-router-dom/cjs/react-router-dom';
 import { getGroup } from '../../../store/groups';
+import { createEvent } from '../../../store/events';
 
 function CreateEvent() {
     const { groupId } = useParams();
     const dispatch = useDispatch();
+    const history = useHistory();
     const [group, setGroup] = useState({});
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -101,11 +103,11 @@ function CreateEvent() {
             price,
             description,
             startDate: start,
-            endDate: end
+            endDate: end,
+            groupId
         };
-        console.log('event submit', event, image)
-        // const newEvent = await dispatch(create(event, image));
-        // history.push(`/events/${newEvent.id}`);
+        const newEvent = await dispatch(createEvent(event, image));
+        history.push(`/events/${newEvent.id}`);
     }
 
     return (
