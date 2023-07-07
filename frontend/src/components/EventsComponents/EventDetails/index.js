@@ -13,6 +13,7 @@ function EventDetails() {
     const history = useHistory();
     const { eventId } = useParams();
     const event = useSelector(state => state.events.singleEvent);
+    const user = useSelector(state => state.session.user);
     useEffect(() => { dispatch(getEvent(eventId)) }, [dispatch, eventId]);
 
     return (
@@ -28,7 +29,7 @@ function EventDetails() {
                 <div>
                     <img src={event.EventImages?.find(img => img.preview)?.url} />
                     <div>
-                        <div onClick={()=>history.push(`/groups/${event.Group?.id}`)}>
+                        <div onClick={() => history.push(`/groups/${event.Group?.id}`)}>
                             <img src={event.Group?.previewImage} />
                             <div>
                                 <h4>{event.Group?.name}</h4>
@@ -41,7 +42,7 @@ function EventDetails() {
                             <div>{event.price ? `$${event.price}` : 'Free'}</div>
                             <div>
                                 <div>{event.type}</div>
-                                <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{ type: 'Event', eventId: eventId, groupId:event.Group?.id }} />} />
+                                {user?.id === event.organizerId && <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{ type: 'Event', eventId: eventId, groupId: event.Group?.id }} />} />}
                             </div>
                         </div>
                     </div>

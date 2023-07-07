@@ -38,6 +38,7 @@ export const getEvent = (id) => async dispatch => {
     let group = await csrfFetch(`/api/groups/${event.Group.id}`);
     group= await group.json();
     event.Host = `${group.Organizer.firstName} ${group.Organizer.lastName}`;
+    event.organizerId = group.Organizer.id;
     event.Group.previewImage = group.GroupImages[0].url;
     dispatch(loadEvent(event));
     return event;
