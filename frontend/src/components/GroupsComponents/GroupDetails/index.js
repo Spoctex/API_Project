@@ -12,7 +12,25 @@ function GroupDetails() {
     const history = useHistory();
     const { groupId } = useParams();
     const group = useSelector(state => state.groups.singleGroup);
+    const user = useSelector(state=>state.session.user);
     useEffect(() => { dispatch(getGroup(groupId)) }, [dispatch, groupId]);
+
+    let groupButtons;
+    console.log(user, group)
+    if(user?.id===group?.organizerId){
+        groupButtons = (
+            <>
+            <button onClick={()=>history.push(`/groups/${groupId}/events/new`)}>Create Event</button>
+            <button onClick={()=>history.push(`/groups/${groupId}/edit`)}>Update</button>
+            <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{type:'Group',groupId:groupId}}/>} />
+            </>
+        )
+    } else{
+        groupButtons =(
+            <button>Join This Group</button>
+        )
+    }
+
 
     return (
         <>
@@ -27,10 +45,7 @@ function GroupDetails() {
                         <h4>{`${group.city}, ${group.state}`}</h4>
                         <h4>{`${group.numMembers} members * ${group.private ? 'Private' : 'Public'}`}</h4>
                         <h4>{`Organized by ${group.Organizer?.firstName} ${group.Organizer?.lastName}`}</h4>
-                        <button>Join this group</button>
-                        <button onClick={()=>history.push(`/groups/${groupId}/events/new`)}>Create Event</button>
-                        <button onClick={()=>history.push(`/groups/${groupId}/edit`)}>Update</button>
-                        <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{type:'Group',groupId:groupId}}/>} />
+                        {groupButtons}
                     </div>
                 </div>
             </div>
