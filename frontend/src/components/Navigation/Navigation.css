@@ -1,38 +1,51 @@
-.hidden{
+.hidden {
     display: none
 }
-#navBar{
+
+#navBar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid lightgray;
 }
-#loginButtons>button{
+
+#loginButtons>button {
     background: none;
     border: none;
+    color: white;
     font-family: 'Belanosima', serif;
     font-size: x-large;
     padding: 20px;
 }
-#logo{
+
+#modal-content {
+    background-color: rgb(24, 26, 27);
+}
+
+#logo {
     padding: 20px;
 }
-#userButtons{
+
+#userButtons {
     display: flex;
     align-items: center;
 }
-#userButtons>a{
+
+#userButtons>a {
     margin-right: 20px;
     font-size: large;
     text-decoration: none;
 }
-#profileDrop{
+
+#profileDrop {
     margin-right: 20px;
     background: none;
     border: none;
     font-family: 'Belanosima', serif;
     font-size: xx-large;
+    color: white;
 }
+
 .profile-dropdown {
     background-color: rgb(24, 26, 27);
     list-style-type: none;
@@ -45,18 +58,22 @@
     border-color: rgb(140, 130, 115);
     border-image: initial;
 }
-.profile-dropdown>li{
+
+.profile-dropdown>li {
     padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-#logOut{
+
+#logOut {
     background: none;
     border: none;
     font-family: 'Belanosima', serif;
+    color: white;
 }
-#logOutLi{
+
+#logOutLi {
     border-top: 1px solid;
     border-color: rgb(140, 130, 115);
     margin-left: 4px;

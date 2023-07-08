@@ -4,3 +4,7 @@ img {
     max-height: 300px;
 }
 
+body{
+    background-color: rgb(24, 26, 27);
+    color:white;
+}
