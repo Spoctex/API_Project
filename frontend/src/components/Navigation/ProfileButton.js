@@ -5,11 +5,13 @@ import * as sessionActions from '../../store/session';
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
+  const [dropMark,setDropMark] = useState('v');
   const ulRef = useRef();
 
   const openMenu = () => {
     if (showMenu) return;
     setShowMenu(true);
+    setDropMark('^')
   };
 
   useEffect(() => {
@@ -18,6 +20,7 @@ function ProfileButton({ user }) {
     const closeMenu = (e) => {
       if (!ulRef.current.contains(e.target)) {
         setShowMenu(false);
+        setDropMark('v');
       }
     };
 
@@ -35,15 +38,14 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button onClick={openMenu}>
-        <i className="fas fa-user-circle" />
+      <button id='profileDrop' onClick={openMenu}>
+        <i className="fas fa-user-circle" />  {dropMark}
       </button>
       <ul className={ulClassName} ref={ulRef}>
         <li>{user.username}</li>
-        <li>{user.firstName} {user.lastName}</li>
         <li>{user.email}</li>
-        <li>
-          <button onClick={logout}>Log Out</button>
+        <li id='logOutLi'>
+          <button id='logOut' onClick={logout}>Log Out</button>
         </li>
       </ul>
     </>

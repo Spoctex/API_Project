@@ -13,21 +13,18 @@ function Navigation({ isLoaded }) {
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <>
+      <div id='userButtons'>
         <NavLink to='/groups/new'>
           Start a new group
         </NavLink>
-        <ul>
-        <li>
-          <ProfileButton user={sessionUser} />
-        </li>
-        </ul>
-      </>
+        <div>
+        <ProfileButton user={sessionUser} />
+        </div>
+      </div>
     );
   } else {
     sessionLinks = (
-      <ul>
-      <li>
+      <div id='loginButtons'>
         <OpenModalButton
           buttonText="Log In"
           modalComponent={<LoginFormModal />}
@@ -36,18 +33,17 @@ function Navigation({ isLoaded }) {
           buttonText="Sign Up"
           modalComponent={<SignupFormModal />}
         />
-      </li>
-      </ul>
+      </div>
     );
   }
 
   return (
-    <>
-        <NavLink exact to="/">
-          Home
-        </NavLink>
+    <div id='navBar'>
+      <NavLink exact to="/">
+        <img id='logo' src='https://realfavicongenerator.net/files/cd99cb24628c920e5de0ce14b29e323e30e354d6/package_files/favicon.ico' />
+      </NavLink>
       {isLoaded && sessionLinks}
-    </>
+    </div>
   );
 }
 
