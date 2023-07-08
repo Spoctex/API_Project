@@ -45,30 +45,26 @@ useEffect(()=>{
     <>
       <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          Username or Email
           <input
             type="text"
+            placeholder="Username or Email"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
             required
           />
-        </label>
-        <label>
-          Password
           <input
             type="password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </label>
         {errors.credential && (
           <p>{errors.credential}</p>
         )}
         <button type="submit" disabled={loginInfo}>Log In</button>
       </form>
-      <p onClick={logDemo}>Demo User</p>
+      <p onClick={logDemo} id='demoButton'>Demo User</p>
     </>
   );
 }
