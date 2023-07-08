@@ -24,6 +24,17 @@ function LoginFormModal() {
         }
       });
   };
+  const logDemo = (e) => {
+    setErrors({});
+    return dispatch(sessionActions.login({ credential:'Demo-lition', password:'password' }))
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
+  };
 
 useEffect(()=>{
   if(password.length>5&&credential.length>3)setLoginInfo(false);
@@ -57,6 +68,7 @@ useEffect(()=>{
         )}
         <button type="submit" disabled={loginInfo}>Log In</button>
       </form>
+      <p onClick={logDemo}>Demo User</p>
     </>
   );
 }
