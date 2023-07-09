@@ -8,13 +8,17 @@ function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const [showMenu, setShowMenu] = useState(false);
-  const [dropMark, setDropMark] = useState('v');
+  const [dropMark, setDropMark] = useState(<span class="material-symbols-outlined">
+  expand_more
+  </span>);
   const ulRef = useRef();
 
   const openMenu = () => {
     if (showMenu) return;
     setShowMenu(true);
-    setDropMark('^')
+    setDropMark(<span class="material-symbols-outlined">
+    expand_less
+    </span>)
   };
 
   useEffect(() => {
@@ -23,7 +27,9 @@ function ProfileButton({ user }) {
     const closeMenu = (e) => {
       if (!ulRef.current.contains(e.target)) {
         setShowMenu(false);
-        setDropMark('v');
+        setDropMark(<span class="material-symbols-outlined">
+        expand_more
+        </span>);
       }
     };
 

@@ -69,23 +69,30 @@
     border-radius: 20px;
     width: 100%;
     height: 149px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
     border-bottom: solid 3px white;
     border-right: solid 3px white;
-}
-
-#startEndEvent {
     display: grid;
-    grid-template-columns: 60px 1fr;
     grid-template-areas:
-        "start startDate"
-        "end endDate";
+    "clock times dates"
+    "dolla price ."
+    "map type button";
+    align-items: center;
+    column-gap: none;
+    grid-template-columns: 40px 65px;
 }
-
+#eventClock{
+    grid-area: clock;
+}
+#eventMap{
+    grid-area: map;
+}
+#eventType{
+    grid-area: type;
+}
 .eventDetailsText {
     color: grey;
+    display: flex;
+    align-items: center;
 }
 
 .eventTime {
@@ -93,7 +100,9 @@
 }
 #hiddenButtonEvent{
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
+    align-items: end;
+    grid-area: button;
 }
 #hiddenButtonEvent>button{
     background-color: grey;
@@ -104,4 +113,5 @@
     font-family: 'Belanosima', serif;
     font-size: medium;
     justify-self: flex-start;
+    margin-left: 10px;
 }

@@ -24,7 +24,7 @@ function EventDetails() {
                     {'<'} <NavLink to='/events'>Events</NavLink>
                 </span>
                 <h1>{event.name}</h1>
-                <h3>{`Hosted by ${event.Host}`}</h3>
+                <h3>{`Hosted by: ${event.Host}`}</h3>
             </div>
             <div id='eventDetails'>
                 <div id='welcomeEvent'>
@@ -38,15 +38,30 @@ function EventDetails() {
                             </div>
                         </div>
                         <div id='eventDetailsCard'>
-                            <div id='startEndEvent'>
-                                <div className='eventDetailsText'>START</div>
-                                <div className='eventTime'>{`${event.startDate?.slice(0, 10)} · ${event.startDate?.slice(11, 19)}`}</div>
-                                <div className='eventDetailsText'>END</div>
-                                <div className='eventTime'>{`${event.endDate?.slice(0, 10)} · ${event.endDate?.slice(11, 19)}`}</div>
+                            <span id='eventClock' className="material-symbols-outlined eventDetailsText">
+                                schedule
+                            </span>
+                            <div id='eventStartEnd'>
+                                <div id='eventStart' className='eventDetailsText'>START</div>
+                                <div id='eventEnd' className='eventDetailsText'>END</div>
                             </div>
-                            <div className='eventDetailsText'>{event.price ? `$ ${event.price}` : 'Free'}</div>
+                            <div id='eventDates'>
+                                <div id='eventStartDate' className='eventTime'>{`${event.startDate?.slice(0, 10)} · ${event.startDate?.slice(11, 19)}`}</div>
+                                <div id='eventEndDate' className='eventTime'>{`${event.endDate?.slice(0, 10)} · ${event.endDate?.slice(11, 19)}`}</div>
+                            </div>
+
+                            <span id='eventDollar' className="material-symbols-outlined eventDetailsText">
+                                attach_money
+                            </span>
+                            <div id='eventPrice' className='eventDetailsText'>
+                                {event.price ? `$ ${event.price}` : 'FREE'}</div>
+                            <span id='eventMap' className="material-symbols-outlined eventDetailsText">
+                                pin_drop
+                            </span>
+                            <div id='eventType' className='eventDetailsText'>
+                                {event.type}</div>
                             <div id='hiddenButtonEvent'>
-                                <div className='eventDetailsText'>{event.type}</div>
+                            {user?.id === event.organizerId && <button onClick={()=>window.alert('Feature coming soon...')}>Update</button>}
                                 {user?.id === event.organizerId && <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{ type: 'Event', eventId: eventId, groupId: event.Group?.id }} />} />}
                             </div>
                         </div>
