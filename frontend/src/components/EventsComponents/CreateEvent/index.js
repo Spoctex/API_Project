@@ -138,13 +138,13 @@ function CreateEvent() {
                     <option>Online</option>
                 </select>
                 {submitted && errors.eventType && <p className='eventFormErrors'>{errors.eventType}</p>}
-                <p id='eventSelect1'>Is this event private or public?</p>
+                {/* <p id='eventSelect1'>Is this event private or public?</p>
                 <select value={eventPrivate} onChange={(e) => setEventPrivate(e.target.value)}>
                     <option value='' disabled>{'(Select one)'}</option>
                     <option>Private</option>
                     <option>Public</option>
                 </select>
-                {submitted && errors.eventPrivate && <p className='eventFormErrors'>{errors.eventPrivate}</p>}
+                {submitted && errors.eventPrivate && <p className='eventFormErrors'>{errors.eventPrivate}</p>} */}
                 <p id='eventSelect2'>What is the price for your event?</p>
                 <input placeholder='$ 0.00' value={price} onChange={(e) => setPrice(e.target.value)} />
                 {submitted && errors.price && <p className='eventFormErrors'>{errors.price}</p>}

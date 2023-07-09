@@ -67,12 +67,12 @@
 
 #buttonsGroup>div>button {
     background-color: grey;
-    border: white solid 3px;
-    box-shadow: white 3px 2px;
+    border: white solid 2px;
+    box-shadow: white 2px 1px;
     font-family: 'Belanosima', serif;
     font-size: medium;
     justify-self: flex-start;
-    margin-right: 15px;
+    margin-right: 3px;
 }
 
 #bottomGroup {
