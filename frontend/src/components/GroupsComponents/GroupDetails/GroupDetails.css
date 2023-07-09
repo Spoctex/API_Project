@@ -73,9 +73,13 @@
 .cardGroup{
     border-radius: 10px;
     background-color: rgb(24, 26, 27);
-    width: 550px;
+    width: 540px;
     padding: 20px;
     margin-bottom: 20px;
+    /* border-top: solid 3px white; */
+    border-bottom: solid 3px white;
+    /* border-right: solid 3px white; */
+    border-left: solid 3px white;
 }
 .cardGroup>div{
     display: flex;
