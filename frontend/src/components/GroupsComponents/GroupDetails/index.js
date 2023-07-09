@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import './index.css';
+import './GroupDetails.css';
 import { NavLink, useParams, useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getGroup } from '../../../store/groups';
@@ -19,15 +19,15 @@ function GroupDetails() {
     console.log(user, group)
     if (user?.id === group?.organizerId) {
         groupButtons = (
-            <>
+            <div>
                 <button onClick={() => history.push(`/groups/${groupId}/events/new`)}>Create Event</button>
                 <button onClick={() => history.push(`/groups/${groupId}/edit`)}>Update</button>
                 <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{ type: 'Group', groupId: groupId }} />} />
-            </>
+            </div>
         )
     } else {
         groupButtons = (
-            <button>Join This Group</button>
+            <button id='joinGroup'>Join This Group</button>
         )
     }
 
@@ -50,7 +50,7 @@ function GroupDetails() {
 
 
 
-        function eventCardCreate(eventArr){
+        function eventCardCreate(eventArr) {
             return eventArr.map(event => {
                 return (
                     <div onClick={() => history.push(`/events/${event.id}`)}>
@@ -69,38 +69,44 @@ function GroupDetails() {
         }
 
         eventCards = (<>
-            {upcoming.length && <h3>Upcoming Events</h3>}
-            {upcoming.length && eventCardCreate(upcoming)}
-            {past.length && <h3>Past Events</h3>}
-            {past.length && eventCardCreate(past)}
+            {!!upcoming.length && <h3>Upcoming Events ({upcoming.length})</h3>}
+            {!!upcoming.length && eventCardCreate(upcoming)}
+            {!!past.length && <h3>Past Events ({past.length})</h3>}
+            {!!past.length && eventCardCreate(past)}
         </>)
     } else eventCards = (<h3>No Upcoming Events</h3>)
 
 
     return (
-        <>
-            <div>
-                <span>
-                    {'<'} <NavLink to='/groups'>Groups</NavLink>
-                </span>
+        <div>
+            <div id='middleWelcomeGroup'>
+                <p id='hideGroup'>gggg</p>
                 <div>
-                    <img src={group.GroupImages?.find(img => img.preview)?.url} />
-                    <div>
-                        <h3>{group.name}</h3>
-                        <h4>{`${group.city}, ${group.state}`}</h4>
-                        <h4>{`${group.numMembers} members * ${group.private ? 'Private' : 'Public'}`}</h4>
-                        <h4>{`Organized by ${group.Organizer?.firstName} ${group.Organizer?.lastName}`}</h4>
-                        {groupButtons}
+                    <span id='breadcrumbGroup'>
+                        {'<'} <NavLink to='/groups'>Groups</NavLink>
+                    </span>
+                    <div id='welcomeGroup'>
+                        <img src={group.GroupImages?.find(img => img.preview)?.url} />
+                        <div id='welcomeInfoGroup'>
+                            <h1>{group.name}</h1>
+                            <h3>{`${group.city}, ${group.state}`}</h3>
+                            <h3>{`${group.numMembers} members * ${group.private ? 'Private' : 'Public'}`}</h3>
+                            <h3>{`Organized by ${group.Organizer?.firstName} ${group.Organizer?.lastName}`}</h3>
+                            <div id='buttonsGroup'>
+                            {groupButtons}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div>
-                <h3>Organizer</h3>
-                <h4>{`${group.Organizer?.firstName} ${group.Organizer?.lastName}`}</h4>
-                <h3>What we're about</h3>
-                <span>{group.about}</span>
-                {eventCards}
-                {/* <h3>Events</h3>
+            <div id='bottomGroup'>
+                <div>
+                    <h3>Organizer</h3>
+                    <h4>{`${group.Organizer?.firstName} ${group.Organizer?.lastName}`}</h4>
+                    <h3>What we're about</h3>
+                    <p>{group.about}</p>
+                    {eventCards}
+                    {/* <h3>Events</h3>
                 {group.Events?.map(event => {
                     return (
                         <div onClick={()=>history.push(`/events/${event.id}`)}>
@@ -116,8 +122,9 @@ function GroupDetails() {
                         </div>
                     );
                 })} */}
+                </div>
             </div>
-        </>
+        </div>
     );
 }
 

@@ -1,0 +1,74 @@
+#bottomGroup{
+    background-color: rgb(40, 40, 40);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    padding-left: 74px;
+    padding-right: 74px;
+}
+#middleWelcomeGroup{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 74px;
+    padding-right: 74px;
+}
+#welcomeGroup{
+    display: flex;
+    max-width: 1000px;
+    max-height: 350px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    margin-bottom: 20px;
+}
+#welcomeGroup>img{
+    aspect-ratio: 5/3;
+    height: 350px;
+    margin-right: 20px;
+    border-radius: 10px;
+}
+#hideGroup {
+    visibility: hidden;
+    padding-bottom: 25px;
+}
+#welcomeInfoGroup>h1{
+    margin-top: 0px;
+    font-weight: normal;
+}
+#welcomeInfoGroup>h3{
+    margin-top: 0px;
+    font-weight: normal;
+    color: darkgrey;
+}
+#welcomeInfoGroup{
+    display: flex;
+    flex-direction: column;
+}
+#buttonsGroup{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: end;
+}
+#buttonsGroup>button{
+    background-color: cyan;
+    border: white solid 3px;
+    box-shadow: white 3px 2px;
+    padding: 10px;
+    font-family: 'Belanosima', serif;
+    font-size: medium;
+    justify-self: flex-start;
+    height: 50px;
+    margin-right: 15px;
+}
+#buttonsGroup>div>button{
+    background-color: grey;
+    border: white solid 3px;
+    box-shadow: white 3px 2px;
+    font-family: 'Belanosima', serif;
+    font-size: medium;
+    justify-self: flex-start;
+    margin-right: 15px;
+}
