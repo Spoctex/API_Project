@@ -1,55 +1,57 @@
-
-#middleGroups {
+#middleEvents {
     display: flex;
     justify-content: center;
 }
 
-#listGroups>a {
+#listEvents>a {
     text-decoration: none;
     color: white;
     margin-right: 30px;
     font-size: xx-large;
 }
 
-#listGroups>#inactiveGroups {
+#listEvents>#inactiveEvents {
     color: rgb(245, 160, 85);
     text-decoration: underline;
 }
 
-#hideGroups {
+#hideEvents {
     visibility: hidden;
     padding-bottom: 50px;
 }
 
-#subTitleGroups {
-    margin-top: 30px;
-    margin-bottom: 40px;
+#subTitleEvents {
+    margin-top: 40px;
+    margin-bottom: 30px;
 }
 
-.cardGroups {
+.cardEvents {
     border-top: darkgray solid 3px;
     border-radius: 10px;
     padding: 10px;
     max-width: 800px;
+    display: block;
+}
+.cardEvents>div{
     display: flex;
 }
-.cardGroups>img {
+.cardEvents>div>img {
     aspect-ratio: 3/2;
     height: 200px;
     margin-right: 20px;
     border-radius: 10px;
 }
 
-.infoGroups>h3 {
+.infoEvents>h3 {
     font-weight: normal;
     color: darkgrey;
 }
 
-.infoGroups {
+.infoEvents {
     overflow-wrap: break-word;
     word-break: break-word;
 }
 
-.infoGroups>p {
+.infoEvents>p {
     flex-wrap: inherit;
 }

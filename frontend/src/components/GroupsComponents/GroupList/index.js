@@ -11,21 +11,21 @@ function GroupList() {
     useEffect(() => { dispatch(getGroups()) }, [])
 
     return (
-        <div id='middle'>
+        <div id='middleGroups'>
             {/* <div> */}
-            <div id='list'>
-                <p id='hide'>gggg</p>
+            <div id='listGroups'>
+                <p id='hideGroups'>gggg</p>
                 <NavLink to='/events'>
                     Events
                 </NavLink>
-                <a id='inactive'>Groups</a>
-                <p id='subTitle'>Groups in Converge</p>
+                <a id='inactiveGroups'>Groups</a>
+                <p id='subTitleGroups'>Groups in Converge</p>
                 <div>
                     {groups.map(group => {
                         return (
-                            <div className='card' onClick={() => history.push(`/groups/${group.id}`)}>
+                            <div className='cardGroups' onClick={() => history.push(`/groups/${group.id}`)}>
                                 <img src={group.previewImage} />
-                                <div className='info'>
+                                <div className='infoGroups'>
                                     <h2>{group.name}</h2>
                                     <h3>{`${group.city}, ${group.state}`}</h3>
                                     <p>{group.about}</p>
