@@ -126,3 +126,6 @@
     font-weight: normal;
     color: grey;
 }
+.cardGroup:hover{
+    cursor: pointer;
+}

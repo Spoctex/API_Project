@@ -41,12 +41,16 @@ function GroupDetails() {
             start = start.getTime();
             return start > now;
         })
+        upcoming=upcoming.sort((a,b)=>{
+            a = new Date(a.startDate);
+            b = new Date(b.startDate);
+            return a-b
+        })
         let past = group.Events?.filter(event => {
             let start = new Date(event.startDate);
             start = start.getTime();
             return start <= now;
         })
-        console.log('upcoming', upcoming, 'past', past)
 
 
 
@@ -57,7 +61,7 @@ function GroupDetails() {
                         <div>
                             <img className='cardIMGGroup' src={event.previewImage} />
                             <div className='cardInfoGroup'>
-                                <h3>{`${event.startDate.slice(0, 10)} * ${event.startDate.slice(11, 19)}`}</h3>
+                                <h3>{`${event.startDate.slice(0, 10)} · ${event.startDate.slice(11, 19)}`}</h3>
                                 <h2>{event.name}</h2>
                                 <h4>{`${event.Venue.city}, ${event.Venue.state}`}</h4>
                             </div>
