@@ -96,6 +96,7 @@
     border-bottom: solid 3px white;
     /* border-right: solid 3px white; */
     border-left: solid 3px white;
+    max-height: 275px;
 }
 
 .cardGroup>div {
@@ -104,6 +105,8 @@
 
 .cardGroup>p {
     margin-bottom: 0;
+    overflow: hidden;
+    height: 70px;
 }
 
 .cardIMGGroup {

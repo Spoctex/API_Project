@@ -48,10 +48,19 @@
 }
 
 .infoGroups {
-    overflow-wrap: break-word;
+    /* overflow-wrap: break-word; */
     word-break: break-word;
+    text-overflow: ellipsis;
+
+    /* white-space: nowrap; */
+    overflow: hidden;
 }
 
 .infoGroups>p {
-    flex-wrap: inherit;
+    /* overflow-wrap: break-word; */
+    /* word-break: break-word; */
+    text-overflow: ellipsis;
+    /* white-space: nowrap; */
+    overflow: hidden;
+    height: 50px;
 }

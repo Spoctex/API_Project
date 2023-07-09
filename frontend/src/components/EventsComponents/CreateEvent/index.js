@@ -37,7 +37,7 @@ function CreateEvent() {
         setSubmitted(true);
         let errs = {};
         if (eventType === '') errs.eventType = 'You must pick a type';
-        if (eventPrivate === '') errs.eventPrivate = 'Visibility type is required';
+        // if (eventPrivate === '') errs.eventPrivate = 'Visibility type is required';
         if (name === '') errs.name = 'You must give your event a name';
 
 

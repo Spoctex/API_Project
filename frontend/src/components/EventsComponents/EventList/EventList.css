@@ -61,3 +61,7 @@
 .infoEvents>p {
     flex-wrap: inherit;
 }
+.cardEvents>p{
+    height: 35px;
+    overflow: hidden;
+}
