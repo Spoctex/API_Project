@@ -72,9 +72,11 @@
     font-family: 'Belanosima', serif;
     color: white;
 }
-#logOut:hover{
+
+#logOut:hover {
     cursor: pointer;
 }
+
 #logOutLi {
     border-top: 1px solid;
     border-color: rgb(140, 130, 115);

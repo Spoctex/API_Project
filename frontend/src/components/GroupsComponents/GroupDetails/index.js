@@ -93,7 +93,7 @@ function GroupDetails() {
                             <h3>{`${group.numMembers} members * ${group.private ? 'Private' : 'Public'}`}</h3>
                             <h3>{`Organized by ${group.Organizer?.firstName} ${group.Organizer?.lastName}`}</h3>
                             <div id='buttonsGroup'>
-                            {groupButtons}
+                                {groupButtons}
                             </div>
                         </div>
                     </div>

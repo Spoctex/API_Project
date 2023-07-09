@@ -1,10 +1,11 @@
-#middleWelcomeGroup{
+#middleWelcomeGroup {
     display: flex;
     flex-direction: column;
     padding-left: 74px;
     padding-right: 74px;
 }
-#welcomeGroup{
+
+#welcomeGroup {
     display: flex;
     max-width: 1000px;
     max-height: 350px;
@@ -12,36 +13,47 @@
     word-break: break-word;
     margin-bottom: 20px;
 }
-#welcomeGroup>img{
+
+#breadcrumbGroup>a {
+    color: rgb(245, 160, 85);
+}
+
+#welcomeGroup>img {
     aspect-ratio: 5/3;
     height: 350px;
     margin-right: 20px;
     border-radius: 10px;
 }
+
 #hideGroup {
     visibility: hidden;
     padding-bottom: 25px;
 }
-#welcomeInfoGroup>h1{
+
+#welcomeInfoGroup>h1 {
     margin-top: 0px;
     font-weight: normal;
 }
-#welcomeInfoGroup>h3{
+
+#welcomeInfoGroup>h3 {
     margin-top: 0px;
     font-weight: normal;
     color: darkgrey;
 }
-#welcomeInfoGroup{
+
+#welcomeInfoGroup {
     display: flex;
     flex-direction: column;
 }
-#buttonsGroup{
+
+#buttonsGroup {
     height: 100%;
     width: 100%;
     display: flex;
     align-items: end;
 }
-#buttonsGroup>button{
+
+#buttonsGroup>button {
     background-color: cyan;
     border: white solid 3px;
     box-shadow: white 3px 2px;
@@ -52,7 +64,8 @@
     height: 50px;
     margin-right: 15px;
 }
-#buttonsGroup>div>button{
+
+#buttonsGroup>div>button {
     background-color: grey;
     border: white solid 3px;
     box-shadow: white 3px 2px;
@@ -61,7 +74,8 @@
     justify-self: flex-start;
     margin-right: 15px;
 }
-#bottomGroup{
+
+#bottomGroup {
     background-color: rgb(40, 40, 40);
     display: flex;
     flex-direction: column;
@@ -71,7 +85,8 @@
     padding-right: 74px;
     border-radius: 20px;
 }
-.cardGroup{
+
+.cardGroup {
     border-radius: 10px;
     background-color: rgb(24, 26, 27);
     width: 540px;
@@ -82,26 +97,32 @@
     /* border-right: solid 3px white; */
     border-left: solid 3px white;
 }
-.cardGroup>div{
+
+.cardGroup>div {
     display: flex;
 }
-.cardGroup>p{
+
+.cardGroup>p {
     margin-bottom: 0;
 }
-.cardIMGGroup{
+
+.cardIMGGroup {
     aspect-ratio: 3/2;
     height: 200px;
     margin-right: 10px;
     border-radius: 10px;
 }
-.cardInfoGroup>h2{
+
+.cardInfoGroup>h2 {
     font-weight: normal;
 }
-.cardInfoGroup>h3{
+
+.cardInfoGroup>h3 {
     font-weight: normal;
     color: rgb(245, 160, 85);
 }
-.cardInfoGroup>h4{
+
+.cardInfoGroup>h4 {
     font-weight: normal;
     color: grey;
 }

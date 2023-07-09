@@ -62,18 +62,18 @@ export const createGroup = (group, image) => async dispatch => {
     return newGroup;
 }
 
-export const updateGroup = (group, id) => async dispatch =>{
-    let reGroup = await csrfFetch(`/api/groups/${id}`,{
+export const updateGroup = (group, id) => async dispatch => {
+    let reGroup = await csrfFetch(`/api/groups/${id}`, {
         method: 'PUT',
-        body:JSON.stringify(group)
+        body: JSON.stringify(group)
     });
-    reGroup=reGroup.json();
+    reGroup = reGroup.json();
     dispatch(loadGroup(reGroup));
     return reGroup;
 }
 
-export const deleteGroup = (id) => async dispatch =>{
-    let res = await csrfFetch(`/api/groups/${id}`,{
+export const deleteGroup = (id) => async dispatch => {
+    let res = await csrfFetch(`/api/groups/${id}`, {
         method: 'DELETE'
     });
     dispatch(loadGroup({}))

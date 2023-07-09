@@ -32,9 +32,11 @@
     max-width: 800px;
     display: block;
 }
-.cardEvents>div{
+
+.cardEvents>div {
     display: flex;
 }
+
 .cardEvents>div>img {
     aspect-ratio: 3/2;
     height: 200px;

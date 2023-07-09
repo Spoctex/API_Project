@@ -18,7 +18,7 @@ function Navigation({ isLoaded }) {
           Start a new group
         </NavLink>
         <div>
-        <ProfileButton user={sessionUser} />
+          <ProfileButton user={sessionUser} />
         </div>
       </div>
     );

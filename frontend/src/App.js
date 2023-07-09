@@ -24,9 +24,9 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded &&
         <Switch>
-        <Route exact path='/'>
-          <Landing />
-        </Route>
+          <Route exact path='/'>
+            <Landing />
+          </Route>
           <Route exact path='/groups'>
             <GroupList />
           </Route>

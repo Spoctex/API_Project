@@ -36,7 +36,7 @@ export const getEvent = (id) => async dispatch => {
     let event = await csrfFetch(`/api/events/${id}`);
     event = await event.json();
     let group = await csrfFetch(`/api/groups/${event.Group.id}`);
-    group= await group.json();
+    group = await group.json();
     event.Host = `${group.Organizer.firstName} ${group.Organizer.lastName}`;
     event.organizerId = group.Organizer.id;
     event.Group.previewImage = group.GroupImages[0].url;
@@ -63,8 +63,8 @@ export const createEvent = (event, image) => async dispatch => {
     return newEvent;
 }
 
-export const deleteEvent = (id) => async dispatch =>{
-    let res = await csrfFetch(`/api/events/${id}`,{
+export const deleteEvent = (id) => async dispatch => {
+    let res = await csrfFetch(`/api/events/${id}`, {
         method: 'DELETE'
     });
     dispatch(loadEvent({}))
