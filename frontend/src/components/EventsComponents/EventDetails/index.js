@@ -45,8 +45,8 @@ function EventDetails() {
                                 <div className='eventTime'>{`${event.endDate?.slice(0, 10)} * ${event.endDate?.slice(11, 19)}`}</div>
                             </div>
                             <div className='eventDetailsText'>{event.price ? `$ ${event.price}` : 'Free'}</div>
-                            <div className='eventDetailsText'>
-                                <div>{event.type}</div>
+                            <div id='hiddenButtonEvent'>
+                                <div className='eventDetailsText'>{event.type}</div>
                                 {user?.id === event.organizerId && <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{ type: 'Event', eventId: eventId, groupId: event.Group?.id }} />} />}
                             </div>
                         </div>

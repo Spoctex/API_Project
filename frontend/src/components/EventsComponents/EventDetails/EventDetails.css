@@ -91,3 +91,17 @@
 .eventTime {
     color: rgb(245, 160, 85);
 }
+#hiddenButtonEvent{
+    display: flex;
+    justify-content: space-between;
+}
+#hiddenButtonEvent>button{
+    background-color: grey;
+    border: white solid 3px;
+    box-shadow: white 2px 1px;
+    padding-left: 7px;
+    padding-right: 7px;
+    font-family: 'Belanosima', serif;
+    font-size: medium;
+    justify-self: flex-start;
+}
