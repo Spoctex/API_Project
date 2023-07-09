@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import './index.css';
+import './EventDetails.css';
 import { NavLink, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getEvent } from '../../../store/events';
@@ -18,37 +18,42 @@ function EventDetails() {
 
     return (
         <>
-            <div>
-                <span>
+            <div id='titleEvent'>
+                <p id='hideEvent'>gggg</p>
+                <span id='breadcrumbEvent'>
                     {'<'} <NavLink to='/events'>Events</NavLink>
                 </span>
-                <h3>{event.name}</h3>
-                <h4>{`Hosted by ${event.Host}`}</h4>
+                <h1>{event.name}</h1>
+                <h3>{`Hosted by ${event.Host}`}</h3>
             </div>
-            <div>
-                <div>
+            <div id='eventDetails'>
+                <div id='welcomeEvent'>
                     <img src={event.EventImages?.find(img => img.preview)?.url} />
                     <div>
-                        <div onClick={() => history.push(`/groups/${event.Group?.id}`)}>
+                        <div id='groupCardEvent' onClick={() => history.push(`/groups/${event.Group?.id}`)}>
                             <img src={event.Group?.previewImage} />
                             <div>
                                 <h4>{event.Group?.name}</h4>
                                 <h4>{event.Group?.private ? 'Private' : 'Public'}</h4>
                             </div>
                         </div>
-                        <div>
-                            <div>{`${event.startDate?.slice(0, 10)} * ${event.startDate?.slice(11, 19)}`}</div>
-                            <div>{`${event.endDate?.slice(0, 10)} * ${event.endDate?.slice(11, 19)}`}</div>
-                            <div>{event.price ? `$${event.price}` : 'Free'}</div>
-                            <div>
+                        <div id='eventDetailsCard'>
+                            <div id='startEndEvent'>
+                                <div className='eventDetailsText'>START</div>
+                                <div className='eventTime'>{`${event.startDate?.slice(0, 10)} * ${event.startDate?.slice(11, 19)}`}</div>
+                                <div className='eventDetailsText'>END</div>
+                                <div className='eventTime'>{`${event.endDate?.slice(0, 10)} * ${event.endDate?.slice(11, 19)}`}</div>
+                            </div>
+                            <div className='eventDetailsText'>{event.price ? `$ ${event.price}` : 'Free'}</div>
+                            <div className='eventDetailsText'>
                                 <div>{event.type}</div>
                                 {user?.id === event.organizerId && <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{ type: 'Event', eventId: eventId, groupId: event.Group?.id }} />} />}
                             </div>
                         </div>
                     </div>
                 </div>
-                <h2>Details</h2>
-                <div>{event.description}</div>
+                <h1>Details</h1>
+                <p>{event.description}</p>
             </div>
         </>
     );

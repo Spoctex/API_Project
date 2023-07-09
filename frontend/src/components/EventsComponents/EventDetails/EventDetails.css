@@ -1,0 +1,80 @@
+#titleEvent{
+    padding-left: 74px;
+    padding-right: 74px;
+}
+#breadcrumbEvent>a{
+    color: rgb(245, 160, 85);
+}
+#hideEvent {
+    visibility: hidden;
+    padding-bottom: 25px;
+}
+#titleEvent>h1{
+    font-weight: normal;
+}
+#titleEvent>h3{
+    font-weight: normal;
+    color: grey;
+    margin-bottom: 50px;
+}
+#eventDetails{
+    background-color: rgb(40, 40, 40);
+    border-radius: 20px;
+    padding-top: 30px;
+    padding-left: 74px;
+    padding-right: 74px;
+    padding-bottom: 30px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    height: 100%;
+}
+#welcomeEvent{
+    display: flex;
+}
+#welcomeEvent>img{
+    height: 350px;
+    aspect-ratio: 3/2;
+    border-radius: 20px;
+    margin-right: 15px;
+}
+#groupCardEvent{
+    padding: 20px;
+    background-color: rgb(24, 26, 27);
+    border-radius: 20px;
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+    border-bottom: solid 3px white;
+    border-right: solid 3px white;
+}
+#groupCardEvent>img{
+    border-radius: 10px;
+    aspect-ratio: 3/2;
+    height: 100px;
+    margin-right: 10px;
+}
+#eventDetailsCard{
+    padding: 20px;
+    background-color: rgb(24, 26, 27);
+    border-radius: 20px;
+    width: 100%;
+    height: 149px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border-bottom: solid 3px white;
+    border-right: solid 3px white;
+}
+#startEndEvent{
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    grid-template-areas:
+    "start startDate"
+    "end endDate";
+}
+.eventDetailsText{
+    color: grey;
+}
+.eventTime{
+    color: rgb(245, 160, 85);
+}
