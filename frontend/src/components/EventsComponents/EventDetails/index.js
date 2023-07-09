@@ -40,9 +40,9 @@ function EventDetails() {
                         <div id='eventDetailsCard'>
                             <div id='startEndEvent'>
                                 <div className='eventDetailsText'>START</div>
-                                <div className='eventTime'>{`${event.startDate?.slice(0, 10)} * ${event.startDate?.slice(11, 19)}`}</div>
+                                <div className='eventTime'>{`${event.startDate?.slice(0, 10)} · ${event.startDate?.slice(11, 19)}`}</div>
                                 <div className='eventDetailsText'>END</div>
-                                <div className='eventTime'>{`${event.endDate?.slice(0, 10)} * ${event.endDate?.slice(11, 19)}`}</div>
+                                <div className='eventTime'>{`${event.endDate?.slice(0, 10)} · ${event.endDate?.slice(11, 19)}`}</div>
                             </div>
                             <div className='eventDetailsText'>{event.price ? `$ ${event.price}` : 'Free'}</div>
                             <div id='hiddenButtonEvent'>

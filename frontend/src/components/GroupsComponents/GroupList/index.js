@@ -29,7 +29,7 @@ function GroupList() {
                                     <h2>{group.name}</h2>
                                     <h3>{`${group.city}, ${group.state}`}</h3>
                                     <p>{group.about}</p>
-                                    <h3>{`${group.numMembers} Members * ${group.private ? 'Private' : 'Public'}`}</h3>
+                                    <h3>{`${group.numMembers} Members · ${group.private ? 'Private' : 'Public'}`}</h3>
                                 </div>
                             </div>
                         );

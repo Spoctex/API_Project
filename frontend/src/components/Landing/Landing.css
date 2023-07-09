@@ -14,6 +14,7 @@
 }
 #getStarted>a{
     font-size: 25px;
+    color: rgb(245, 160, 85);
 }
 #getStarted>p{
     text-align: center;

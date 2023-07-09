@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from 'react-redux';
 import * as sessionActions from '../../store/session';
 import { useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom/cjs/react-router-dom";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -48,6 +49,10 @@ function ProfileButton({ user }) {
         <li>{user.username}</li>
         <li>Hello, {`${user.firstName}`}</li>
         <li>{user.email}</li>
+        <li id='dropNavs'>
+          <NavLink to='/groups'>View Groups</NavLink>
+          <NavLink to='/events'>View Events</NavLink>
+        </li>
         <li id='logOutLi'>
           <button id='logOut' onClick={logout}>Log Out</button>
         </li>

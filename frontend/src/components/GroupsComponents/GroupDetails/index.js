@@ -90,7 +90,7 @@ function GroupDetails() {
                         <div id='welcomeInfoGroup'>
                             <h1>{group.name}</h1>
                             <h3>{`${group.city}, ${group.state}`}</h3>
-                            <h3>{`${group.numMembers} members * ${group.private ? 'Private' : 'Public'}`}</h3>
+                            <h3>{`${group.numMembers} members · ${group.private ? 'Private' : 'Public'}`}</h3>
                             <h3>{`Organized by ${group.Organizer?.firstName} ${group.Organizer?.lastName}`}</h3>
                             <div id='buttonsGroup'>
                                 {groupButtons}

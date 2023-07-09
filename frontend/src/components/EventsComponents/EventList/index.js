@@ -27,7 +27,7 @@ function EventList() {
                                 <div>
                                     <img src={event.previewImage} />
                                     <div className='infoEvents'>
-                                        <h3>{`${event.startDate?.slice(0, 10)} * ${event.startDate?.slice(11, 19)}`}</h3>
+                                        <h3>{`${event.startDate?.slice(0, 10)} · ${event.startDate?.slice(11, 19)}`}</h3>
                                         <h1>{event.name}</h1>
                                         <h3>{`${event.Venue?.city}, ${event.Venue?.state}`}</h3>
                                     </div>
