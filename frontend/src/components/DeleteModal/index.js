@@ -32,7 +32,7 @@ function DeleteModal({ deleteContext }) {
             <h1>Confirm Delete</h1>
             <h3>{`Are you sure you want to remove this ${deleteContext.type}?`}</h3>
             <button onClick={handleDelete}>{`Yes (Delete ${deleteContext.type})`}</button>
-            <button onClick={closeModal}>{`No (Keep ${deleteContext.type})`}</button>
+            <button id='noDelete' onClick={closeModal}>{`No (Keep ${deleteContext.type})`}</button>
         </>
     )
 }

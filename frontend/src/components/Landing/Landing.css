@@ -1,0 +1,55 @@
+#getStarted{
+    display: grid;
+    grid-template-areas:
+    "img1 img2 img3"
+    "link1 link2 link3"
+    "desc1 desc2 desc3";
+    grid-template-columns: 300px 300px 300px;
+    justify-content: center;
+    align-items: top;
+    justify-items: center;
+    column-gap: 30px;
+    margin-right: 100px;
+    margin-left: 100px;
+}
+#getStarted>a{
+    font-size: 25px;
+}
+#getStarted>p{
+    text-align: center;
+}
+#howTo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#howTo>h2{
+    margin-bottom: 0px;
+}
+#howTo>p{
+    max-width: 300px;
+    text-align: center;
+    margin-bottom: 50px;
+}
+#intro{
+    margin-right: 100px;
+    margin-left: 100px;
+    display: grid;
+    grid-template-areas: "title img";
+    grid-template-columns: 1fr 1fr;
+    /* grid-template-rows: 500px; */
+}
+#signup2{
+    display: flex;
+    justify-content: center;
+}
+#signup2>button{
+    background-color: cyan;
+    border: white solid 3px;
+    box-shadow: white 3px 2px;
+    padding: 20px;
+    margin-top: 15px;
+    font-family: 'Belanosima', serif;
+    font-size: large;
+}

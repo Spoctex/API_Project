@@ -29,6 +29,8 @@ body{
     border: lightgrey 2px solid;
     padding: 10px;
     padding-right: 150px;
+    font-family: 'Belanosima', serif;
+    font-size: large;
 }
 #modal-content>form>button, #modal-content>button{
     background-color: cyan;
@@ -37,9 +39,17 @@ body{
     padding: 20px;
     margin-top: 15px;
     width: 100%;
+    font-family: 'Belanosima', serif;
+    font-size: large;
+}
+#modal-content>#noDelete{
+    background-color: grey;
 }
 #modal-content>form>button:hover, #modal-content>button:hover{
     cursor: pointer;
+}
+#modal-content>form>button:disabled, #modal-content>button:disabled{
+    background-color: grey;
 }
 #modal-content>#demoButton:hover{
     cursor: pointer;
