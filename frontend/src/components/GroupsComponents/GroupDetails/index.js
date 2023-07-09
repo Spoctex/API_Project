@@ -25,9 +25,9 @@ function GroupDetails() {
                 <OpenModalButton buttonText='Delete' modalComponent={<DeleteModal deleteContext={{ type: 'Group', groupId: groupId }} />} />
             </div>
         )
-    } else {
+    } else if (user) {
         groupButtons = (
-            <button id='joinGroup'>Join This Group</button>
+            <button id='joinGroup' onClick={()=>window.alert('Feature coming soon...')}>Join This Group</button>
         )
     }
 
@@ -91,7 +91,7 @@ function GroupDetails() {
                             <h1>{group.name}</h1>
                             <h3>{`${group.city}, ${group.state}`}</h3>
                             <h3>{`${group.numMembers} members · ${group.private ? 'Private' : 'Public'}`}</h3>
-                            <h3>{`Organized by ${group.Organizer?.firstName} ${group.Organizer?.lastName}`}</h3>
+                            <h3>{`Organized by: ${group.Organizer?.firstName} ${group.Organizer?.lastName}`}</h3>
                             <div id='buttonsGroup'>
                                 {groupButtons}
                             </div>

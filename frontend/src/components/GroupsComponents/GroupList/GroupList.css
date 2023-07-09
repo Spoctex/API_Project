@@ -32,7 +32,9 @@
     max-width: 800px;
     display: flex;
 }
-
+.cardGroups:hover{
+    cursor: pointer;
+}
 .cardGroups>img {
     aspect-ratio: 3/2;
     height: 200px;
