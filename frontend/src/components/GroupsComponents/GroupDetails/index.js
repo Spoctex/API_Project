@@ -53,16 +53,16 @@ function GroupDetails() {
         function eventCardCreate(eventArr) {
             return eventArr.map(event => {
                 return (
-                    <div onClick={() => history.push(`/events/${event.id}`)}>
+                    <div className='cardGroup' onClick={() => history.push(`/events/${event.id}`)}>
                         <div>
-                            <img src={event.previewImage} />
-                            <div>
-                                <h4>{`${event.startDate.slice(0, 10)} * ${event.startDate.slice(11, 19)}`}</h4>
-                                <h4>{event.name}</h4>
-                                <span>{`${event.Venue.city}, ${event.Venue.state}`}</span>
+                            <img className='cardIMGGroup' src={event.previewImage} />
+                            <div className='cardInfoGroup'>
+                                <h3>{`${event.startDate.slice(0, 10)} * ${event.startDate.slice(11, 19)}`}</h3>
+                                <h2>{event.name}</h2>
+                                <h4>{`${event.Venue.city}, ${event.Venue.state}`}</h4>
                             </div>
                         </div>
-                        <span>{event.description}</span>
+                        <p>{event.description}</p>
                     </div>
                 );
             })
