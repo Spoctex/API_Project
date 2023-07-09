@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './index.css';
-import { useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom/cjs/react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { getGroup } from '../../../store/groups';
 import { createEvent } from '../../../store/events';
 
@@ -20,6 +20,8 @@ function CreateEvent() {
     const [end, setEnd] = useState('');
     const [errors, setErrors] = useState({});
     const [submitted, setSubmitted] = useState(false);
+    const user = useSelector(state => state.session.user);
+    const [groupOwnerId, setGroupOwnerId] = useState(user?.id);
 
 
     useEffect(() => {
@@ -39,9 +41,9 @@ function CreateEvent() {
         if (name === '') errs.name = 'You must give your event a name';
 
 
-        if (price){
+        if (price) {
             let price1 = price.split('.');
-            if ((price1[1]&&(isNaN(price1[1])||price1[1].length > 2)) || Number(price1[0]) < 0 || isNaN(price1[0])) errs.price = 'Please provide a valid price';
+            if ((price1[1] && (isNaN(price1[1]) || price1[1].length > 2)) || Number(price1[0]) < 0 || isNaN(price1[0])) errs.price = 'Please provide a valid price';
         } else errs.price = 'Please provide a valid price';
 
 
@@ -72,6 +74,7 @@ function CreateEvent() {
 
         let end1;
         let endCont = true;
+        if (end === '') errs.end = 'Please provide an end date'
         try {
             end1 = new Date(end);
         } catch {
@@ -109,52 +112,62 @@ function CreateEvent() {
         history.push(`/events/${newEvent.id}`);
     }
 
+    useEffect(() => {
+        async function once() {
+            let group = await dispatch(getGroup(groupId));
+            setGroupOwnerId(group.Organizer.id)
+        }
+        once();
+    }, [])
+
+
+    if (!user || (user && user.id !== groupOwnerId)) return (<Redirect to='/' />)
     return (
-        <form onSubmit={onSubmit}>
-            <h2>{`Create an event for ${group.name}`}</h2>
-            <div>
+        <form id='eventForm' onSubmit={onSubmit}>
+            <h1 className='eventFormTitle'>{`Create an event for ${group.name}`}</h1>
+            <div className='eventFormWrap'>
                 <p>What is the name of your event?</p>
                 <input placeholder='Event Name' value={name} onChange={(e) => setName(e.target.value)} />
-                {submitted && errors.name && <p>{errors.name}</p>}
+                {submitted && errors.name && <p className='eventFormErrors'>{errors.name}</p>}
             </div>
-            <div>
+            <div className='eventFormWrap'>
                 <p>Is this an in person or online event?</p>
                 <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
                     <option value='' disabled>{'(Select one)'}</option>
                     <option>In person</option>
                     <option>Online</option>
                 </select>
-                {submitted && errors.eventType && <p>{errors.eventType}</p>}
-                <p>Is this event private or public?</p>
+                {submitted && errors.eventType && <p className='eventFormErrors'>{errors.eventType}</p>}
+                <p id='eventSelect1'>Is this event private or public?</p>
                 <select value={eventPrivate} onChange={(e) => setEventPrivate(e.target.value)}>
                     <option value='' disabled>{'(Select one)'}</option>
                     <option>Private</option>
                     <option>Public</option>
                 </select>
-                {submitted && errors.eventPrivate && <p>{errors.eventPrivate}</p>}
-                <p>What is the price for your event?</p>
-                <label>$<input placeholder='0.00' value={price} onChange={(e)=>setPrice(e.target.value)}/></label>
-                {submitted && errors.price && <p>{errors.price}</p>}
+                {submitted && errors.eventPrivate && <p className='eventFormErrors'>{errors.eventPrivate}</p>}
+                <p id='eventSelect2'>What is the price for your event?</p>
+                <input placeholder='$ 0.00' value={price} onChange={(e) => setPrice(e.target.value)} />
+                {submitted && errors.price && <p className='eventFormErrors'>{errors.price}</p>}
             </div>
-            <div>
+            <div className='eventFormWrap'>
                 <p>When does your event start?</p>
                 <input type='datetime-local' value={start} onChange={(e) => setStart(e.target.value)} />
-                {submitted && errors.start && <p>{errors.start}</p>}
-                <p>When does your event end?</p>
-                <input type='datetime-local' value={end} onChange={(e) => setEnd(e.target.value)} />
-                {submitted && errors.end && <p>{errors.end}</p>}
+                {submitted && errors.start && <p className='eventFormErrors'>{errors.start}</p>}
+                <p id='eventFormDate1'>When does your event end?</p>
+                <input id='eventFormDate2' type='datetime-local' value={end} onChange={(e) => setEnd(e.target.value)} />
+                {submitted && errors.end && <p className='eventFormErrors'>{errors.end}</p>}
             </div>
-            <div>
+            <div className='eventFormWrap'>
                 <p>Please add an image url for your event below:</p>
-                <input placeholder='Image Url' value={image} onChange={(e) => setImage(e.target.value)} />
-                {submitted && errors.image && <p>{errors.image}</p>}
+                <input id='eventImageInput' placeholder='Image Url' value={image} onChange={(e) => setImage(e.target.value)} />
+                {submitted && errors.image && <p className='eventFormErrors'>{errors.image}</p>}
             </div>
-            <div>
+            <div className='eventFormWrap'>
                 <p>Please describe you event:</p>
                 <textarea placeholder='Please write at least 50 characters' value={description} onChange={(e) => setDescription(e.target.value)} />
-                {submitted && errors.description && <p>{errors.description}</p>}
+                {submitted && errors.description && <p className='eventFormErrors'>{errors.description}</p>}
             </div>
-            <button type='submit'>Create Event</button>
+            <button id='eventFormButton' type='submit'>Create Event</button>
         </form>
     )
 }

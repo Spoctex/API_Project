@@ -20,7 +20,7 @@ function GroupForm({ groupInfo }) {
     const [errors, setErrors] = useState({});
     const [submitted, setSubmitted] = useState(false);
     const user = useSelector(state => state.session.user);
-    const [groupOwnerId, setGroupOwnerId] = useState(user.id);
+    const [groupOwnerId, setGroupOwnerId] = useState(user?.id);
     let organizerId;
     if (user) organizerId = user.id;
     const { groupId } = useParams();
@@ -80,7 +80,7 @@ function GroupForm({ groupInfo }) {
         if (!groupInfo.new) once();
     }, [])
 
-    
+
     if (!user || (!groupInfo.new && user.id !== groupOwnerId))return (<Redirect to='/'/>)
     return (
         <form id='groupForm' onSubmit={onSubmit}>

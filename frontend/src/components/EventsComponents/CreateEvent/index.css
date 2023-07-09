@@ -1,0 +1,85 @@
+#eventForm{
+    padding-left: 100px;
+    padding-right: 100px;
+}
+#eventFormHead{
+    font-weight: normal;
+    margin-top: 30px;
+    color: rgb(245, 160, 85);
+}
+.eventFormTitle{
+    font-weight: normal;
+    font-size: 30px;
+    margin-top: 30px;
+    margin-bottom: 0;
+}
+.eventFormWrap{
+    margin-top: 20px;
+    border-top: solid darkgrey 3px;
+    border-radius: 5px;
+}
+.eventFormWrap>p{
+    margin: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.eventFormWrap>input{
+    background-color: rgb(75, 47, 1);
+    color: lightgrey;
+    padding: 3px;
+    font-family: 'Belanosima', serif;
+    border: solid white 3px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+.eventFormWrap>select{
+    background-color: rgb(75, 47, 1);
+    color: grey;
+    font-family: 'Belanosima', serif;
+    padding: 3px;
+    border: solid white 3px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+#eventSelect1{
+    margin-top: 30px;
+}
+#eventSelect2{
+    margin-top: 30px;
+}
+.eventFormWrap>textarea{
+    background-color: rgb(75, 47, 1);
+    color: grey;
+    font-family: 'Belanosima', serif;
+    border: solid white 3px;
+    border-radius: 5px;
+    padding-bottom: 150px;
+    width: 98%;
+}
+#eventFinalSteps>p{
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+#eventFormButton{
+    background-color: cyan;
+    border: white solid 3px;
+    box-shadow: white 3px 2px;
+    padding: 10px;
+    margin-top: 15px;
+    font-family: 'Belanosima', serif;
+    font-size: large;
+}
+.eventFormErrors{
+    color: cyan;
+    margin: 0;
+}
+#eventFormDate1{
+    margin-top: 50px;
+}
+#eventFormDate2{
+    margin-bottom: 7px;
+}
+#eventImageInput{
+    padding-right: 200px;
+}
