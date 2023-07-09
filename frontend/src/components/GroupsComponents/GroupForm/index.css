@@ -1,0 +1,81 @@
+#groupForm{
+    padding-left: 100px;
+    padding-right: 100px;
+}
+#groupFormHead{
+    font-weight: normal;
+    margin-top: 30px;
+    color: rgb(245, 160, 85);
+}
+.groupFormTitle{
+    font-weight: normal;
+    font-size: 30px;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+.groupFormWrap{
+    margin-top: 20px;
+    border-top: solid darkgrey 3px;
+    border-radius: 5px;
+}
+.groupFormWrap2{
+    width: 60%;
+}
+.groupFormWrap2>p{
+    margin: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.groupFormWrap2>input{
+    background-color: rgb(75, 47, 1);
+    color: lightgrey;
+    font-family: 'Belanosima', serif;
+    border: solid white 3px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+.groupFormWrap2>select{
+    background-color: rgb(75, 47, 1);
+    color: grey;
+    font-family: 'Belanosima', serif;
+    border: solid white 3px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+.groupFormWrap2>textarea{
+    background-color: rgb(75, 47, 1);
+    color: grey;
+    font-family: 'Belanosima', serif;
+    border: solid white 3px;
+    border-radius: 5px;
+    padding-bottom: 70px;
+    padding-right: 50px;
+}
+#aboutList{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+#aboutList>p{
+    margin: 0;
+}
+#groupFinalSteps>p{
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+#groupFormButton{
+    background-color: cyan;
+    border: white solid 3px;
+    box-shadow: white 3px 2px;
+    padding: 10px;
+    margin-top: 15px;
+    font-family: 'Belanosima', serif;
+    font-size: large;
+}
+.groupFormErrors>p{
+    color: cyan;
+    margin: 0;
+}
+#groupState{
+    margin-top: 5px;
+}

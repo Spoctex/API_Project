@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { createGroup, getGroup, updateGroup } from '../../../store/groups';
 import { useEffect } from 'react';
+import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 
 function GroupForm({ groupInfo }) {
     const dispatch = useDispatch();
@@ -18,9 +19,10 @@ function GroupForm({ groupInfo }) {
     const [image, setImage] = useState('');
     const [errors, setErrors] = useState({});
     const [submitted, setSubmitted] = useState(false);
-    const organizer = useSelector(state => state.session.user);
+    const user = useSelector(state => state.session.user);
+    const [groupOwnerId, setGroupOwnerId] = useState(user.id);
     let organizerId;
-    if (organizer) organizerId = organizer.id;
+    if (user) organizerId = user.id;
     const { groupId } = useParams();
 
     const onSubmit = async (e) => {
@@ -73,65 +75,80 @@ function GroupForm({ groupInfo }) {
             setGroupType(group.type);
             setGroupPrivate(group.private ? 'Private' : 'Public');
             setName(group.name);
+            setGroupOwnerId(group.Organizer.id)
         }
         if (!groupInfo.new) once();
     }, [])
 
+    
+    if (!user || (!groupInfo.new && user.id !== groupOwnerId))return (<Redirect to='/'/>)
     return (
-        <form onSubmit={onSubmit}>
-            {groupInfo.new ? <h4>BECOME AN ORGANIZER</h4> :
-                <h4>UPDATE YOUR GROUP'S INFORMATION</h4>}
-            {groupInfo.new ? <h3>We'll walk you through a few steps to build your local community</h3> :
-                <h3>We'll walk you through a few steps to update your group's information</h3>}
-            <div>
-                <h3>First, set your group's location.</h3>
-                <p>Converge groups meet locally, in person and online. We'll connect you with people
-                    in your area, and more can join you online.</p>
-                <input placeholder='City' value={city} onChange={(e) => setCity(e.target.value)} />
-                {submitted && errors.city && <p>{errors.city}</p>}
-                <select value={state} onChange={(e) => setState(e.target.value)}>
-                    <option value='' disabled>Select a state...</option>
-                    {validStates.map(state => (<option>{state}</option>))}
-                </select>
-                {submitted && errors.state && <p>{errors.state}</p>}
+        <form id='groupForm' onSubmit={onSubmit}>
+            {groupInfo.new ? <h3 id='groupFormHead'>BECOME AN ORGANIZER</h3> :
+                <h3 id='groupFormHead'>UPDATE YOUR GROUP'S INFORMATION</h3>}
+            {groupInfo.new ? <h1 className='groupFormTitle'>We'll walk you through a few steps to build your local community</h1> :
+                <h1 className='groupFormTitle'>We'll walk you through a few steps to update your group's information</h1>}
+            <div className='groupFormWrap'>
+                <div className='groupFormWrap2'>
+                    <h1 className='groupFormTitle'>First, set your group's location.</h1>
+                    <p>Converge groups meet locally, in person and online. We'll connect you with people
+                        in your area, and more can join you online.</p>
+                    <input placeholder='City' value={city} onChange={(e) => setCity(e.target.value)} />
+                    {submitted && errors.city && <div className='groupFormErrors'><p>{errors.city}</p></div>}
+                    <select id='groupState' value={state} onChange={(e) => setState(e.target.value)}>
+                        <option value='' disabled>Select a state...</option>
+                        1           {validStates.map(state => (<option>{state}</option>))}
+                    </select>
+                    {submitted && errors.state && <div className='groupFormErrors'><p>{errors.state}</p></div>}
+                </div>
             </div>
-            <div>
-                <h3>What will your group's name be?</h3>
-                <p>Choose a name that will give people a clear idea of what the group is about.
-                    Feel free to get creative! You can edit this later if you change your mind.</p>
-                <input placeholder='What is your group name?' value={name} onChange={(e) => setName(e.target.value)} />
-                {submitted && errors.name && <p>{errors.name}</p>}
+            <div className='groupFormWrap'>
+                <div className='groupFormWrap2'>
+                    <h1 className='groupFormTitle'>What will your group's name be?</h1>
+                    <p>Choose a name that will give people a clear idea of what the group is about.
+                        Feel free to get creative! You can edit this later if you change your mind.</p>
+                    <input placeholder='What is your group name?' value={name} onChange={(e) => setName(e.target.value)} />
+                    {submitted && errors.name && <div className='groupFormErrors'><p>{errors.name}</p></div>}
+                </div>
             </div>
-            <div>
-                <h3>Now describe what your group will be about</h3>
-                <p>People will see this when we promote your group, but you'll be able to add to it later, too.</p>
-                <p>1. What's the purpose of the group?</p>
-                <p>2. Who should join?</p>
-                <p>3. What will you do at your events?</p>
-                <textarea placeholder='Please write at least 50 characters' value={about} onChange={(e) => setAbout(e.target.value)} />
-                {submitted && errors.about && <p>{errors.about}</p>}
+            <div className='groupFormWrap'>
+                <div className='groupFormWrap2'>
+                    <h1 className='groupFormTitle'>Now describe what your group will be about</h1>
+                    <p>People will see this when we promote your group, but you'll be able to add to it later, too.</p>
+                    <div id='aboutList'>
+                        <p>1. What's the purpose of the group?</p>
+                        <p>2. Who should join?</p>
+                        <p>3. What will you do at your events?</p>
+                    </div>
+                    <textarea placeholder='Please write at least 50 characters' value={about} onChange={(e) => setAbout(e.target.value)} />
+                    {submitted && errors.about && <div className='groupFormErrors'><p>{errors.about}</p></div>}
+                </div>
             </div>
-            <div>
-                <h3>Final steps...</h3>
-                <p>Is this an in person or online group?</p>
-                <select value={groupType} onChange={(e) => setGroupType(e.target.value)}>
-                    <option value='' disabled>{'(Select one)'}</option>
-                    <option>In person</option>
-                    <option>Online</option>
-                </select>
-                {submitted && errors.groupType && <p>{errors.groupType}</p>}
-                <p>Is this group private or public?</p>
-                <select value={groupPrivate} onChange={(e) => setGroupPrivate(e.target.value)}>
-                    <option value='' disabled>{'(Select one)'}</option>
-                    <option>Private</option>
-                    <option>Public</option>
-                </select>
-                {submitted && errors.groupPrivate && <p>{errors.groupPrivate}</p>}
-                {groupInfo.new && <p>Please add an image url for your group below:</p>}
-                {groupInfo.new && <input placeholder='Image Url' value={image} onChange={(e) => setImage(e.target.value)} />}
-                {groupInfo.new && submitted && errors.image && <p>{errors.image}</p>}
+            <div className='groupFormWrap'>
+                <div className='groupFormWrap2' id='groupFinalSteps'>
+                    <h1 className='groupFormTitle'>Final steps...</h1>
+                    <p>Is this an in person or online group?</p>
+                    <select value={groupType} onChange={(e) => setGroupType(e.target.value)}>
+                        <option value='' disabled>{'(Select one)'}</option>
+                        <option>In person</option>
+                        <option>Online</option>
+                    </select>
+                    {submitted && errors.groupType && <div className='groupFormErrors'><p>{errors.groupType}</p></div>}
+                    <p>Is this group private or public?</p>
+                    <select value={groupPrivate} onChange={(e) => setGroupPrivate(e.target.value)}>
+                        <option value='' disabled>{'(Select one)'}</option>
+                        <option>Private</option>
+                        <option>Public</option>
+                    </select>
+                    {submitted && errors.groupPrivate && <div className='groupFormErrors'><p>{errors.groupPrivate}</p></div>}
+                    {groupInfo.new && <p>Please add an image url for your group below:</p>}
+                    {groupInfo.new && <input placeholder='Image Url' value={image} onChange={(e) => setImage(e.target.value)} />}
+                    {groupInfo.new && submitted && errors.image && <div className='groupFormErrors'><p>{errors.image}</p></div>}
+                </div>
             </div>
-            <button type='submit'>{groupInfo.new ? 'Create group' : 'Update Group'}</button>
+            <div className='groupFormWrap'>
+                <button id='groupFormButton' type='submit'>{groupInfo.new ? 'Create group' : 'Update Group'}</button>
+            </div>
         </form>
     );
 }
