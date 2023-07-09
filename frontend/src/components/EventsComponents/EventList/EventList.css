@@ -32,7 +32,9 @@
     max-width: 800px;
     display: block;
 }
-
+.cardEvents:hover{
+    cursor: pointer;
+}
 .cardEvents>div {
     display: flex;
 }

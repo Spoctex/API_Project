@@ -7,8 +7,31 @@ import { getEvents } from '../../../store/events';
 function EventList() {
     const history = useHistory();
     const dispatch = useDispatch();
-    const events = useSelector(state => Object.values(state.events.allEvents))
+    let events = useSelector(state => Object.values(state.events.allEvents))
     useEffect(() => { dispatch(getEvents()) }, [])
+
+
+    let now = new Date();
+    now = now.getTime();
+    let upcoming = events.filter(event => {
+        let start = new Date(event.startDate);
+        start = start.getTime();
+        return start > now;
+    })
+    upcoming = upcoming.sort((a, b) => {
+        a = new Date(a.startDate);
+        b = new Date(b.startDate);
+        a = a.getTime();
+        b = b.getTime();
+        return a - b
+    })
+    let past = events.filter(event => {
+        let start = new Date(event.startDate);
+        start = start.getTime();
+        return start <= now;
+    })
+    events = [...upcoming, ...past]
+
 
     return (
         <div id='middleEvents'>

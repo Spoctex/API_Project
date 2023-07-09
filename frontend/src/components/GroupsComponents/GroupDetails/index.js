@@ -44,6 +44,8 @@ function GroupDetails() {
         upcoming=upcoming.sort((a,b)=>{
             a = new Date(a.startDate);
             b = new Date(b.startDate);
+            a=a.getTime();
+            b=b.getTime();
             return a-b
         })
         let past = group.Events?.filter(event => {
