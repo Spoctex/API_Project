@@ -40,7 +40,7 @@ function Navigation({ isLoaded }) {
   return (
     <div id='navBar'>
       <NavLink exact to="/">
-        <img id='logo' src='https://realfavicongenerator.net/files/cd99cb24628c920e5de0ce14b29e323e30e354d6/package_files/favicon.ico' />
+        <img id='logo' src='https://static.wixstatic.com/media/50019b_8a38ed5e19f848cda17abf2c2522bba9~mv2_d_1961_2193_s_2.png/v1/fill/w_1961,h_2193,al_c/50019b_8a38ed5e19f848cda17abf2c2522bba9~mv2_d_1961_2193_s_2.png' />
       </NavLink>
       {isLoaded && sessionLinks}
     </div>
