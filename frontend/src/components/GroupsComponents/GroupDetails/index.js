@@ -16,7 +16,6 @@ function GroupDetails() {
     useEffect(() => { dispatch(getGroup(groupId)) }, [dispatch, groupId]);
 
     let groupButtons;
-    console.log(user, group)
     if (user?.id === group?.organizerId) {
         groupButtons = (
             <div>
